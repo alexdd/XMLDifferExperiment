@@ -34,4 +34,8 @@ FOURTH STEP: use Python’s difflib in XSLT stylesheet extension call on merged 
 
     bla bla <del>some deleted text</del> bla bla
 
-FIFTH STEP: a simple XML to HTML transformation will visualize all changes: red colored and crossed through text for deleted elements and green colored text for added elements.so far. But when detecting atomic text changes we will need to use Python’s difflib
+FIFTH STEP: a simple XML to HTML transformation will visualize all changes: red colored and crossed through text for deleted elements and green colored text for added elements.so far. But when detecting atomic text changes we will need to use Python’s difflib 
+
+is licensed under the GNU Lesser General Public License, see file license.txt. Chinese group labels were extrachted from the Unicode Website, see UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWAREib
+
+XMLDifferExperiment is licensed under the GNU Lesser General Public License, see file license.txt. 
