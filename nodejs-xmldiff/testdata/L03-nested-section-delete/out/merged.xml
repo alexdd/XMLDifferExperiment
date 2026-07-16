@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doc diffing="changed" id="d1">
+   <section diffing="unchanged" id="s1">
+      <title diffing="unchanged" id="t1">Intro</title>
+      <p diffing="unchanged" id="p1">Keep me</p>
+   </section>
+   <section diffing="deleted" id="s2">
+      <title diffing="deleted" id="t2">Gone</title>
+      <p diffing="deleted" id="p2">Delete whole section</p>
+   </section>
+   <section diffing="unchanged" id="s3">
+      <title diffing="unchanged" id="t3">Outro</title>
+      <p diffing="unchanged" id="p3">Still here</p>
+   </section>
+</doc>

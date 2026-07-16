@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doc diffing="changed" id="d1">
+   <section diffing="changed" id="s1">
+      <p diffing="new" id="p3">Brand new child</p>
+      <quote diffing="new" id="q1">Replacement content</quote>
+   </section>
+</doc>

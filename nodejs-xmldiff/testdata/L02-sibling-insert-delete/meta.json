@@ -1,0 +1,4 @@
+{
+  "name": "Sibling delete + insert",
+  "description": "p2 deleted, p4 inserted between p1 and p3. Tests preceding-sibling deleted merge."
+}

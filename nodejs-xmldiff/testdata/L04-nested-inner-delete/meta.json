@@ -1,0 +1,4 @@
+{
+  "name": "Nested inner deletes at two depths",
+  "description": "Delete p2 under section and i2 under nested list; surviving anchors at both levels."
+}

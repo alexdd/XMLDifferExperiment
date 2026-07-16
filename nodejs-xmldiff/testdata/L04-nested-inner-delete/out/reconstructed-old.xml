@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+   <section id="s1">
+      <p id="p1">A</p>
+      <p id="p2">B-delete</p>
+      <p id="p3">C</p>
+      <list id="l1">
+         <item id="i1">one</item>
+         <item id="i2">two-delete</item>
+         <item id="i3">three</item>
+      </list>
+   </section>
+</doc>

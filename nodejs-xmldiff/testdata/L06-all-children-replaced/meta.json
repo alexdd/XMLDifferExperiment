@@ -1,0 +1,4 @@
+{
+  "name": "All children replaced under surviving parent",
+  "description": "Parent s1 keeps same id; every old child deleted; only brand-new children remain. No surviving sibling anchors for merge."
+}

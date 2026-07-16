@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+   <section id="s1">
+      <p id="p1">Lead</p>
+      <p id="p2">Middle</p>
+      <aside id="a1">
+         <p id="p4">Inserted nested aside</p>
+      </aside>
+   </section>
+</doc>

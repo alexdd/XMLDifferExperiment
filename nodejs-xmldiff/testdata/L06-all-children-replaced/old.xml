@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <section id="s1">
+    <p id="p1">Old child one</p>
+    <p id="p2">Old child two</p>
+    <list id="l1">
+      <item id="i1">old item</item>
+    </list>
+  </section>
+</doc>

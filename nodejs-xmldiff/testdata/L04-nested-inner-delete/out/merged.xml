@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doc diffing="changed" id="d1">
+   <section diffing="changed" id="s1">
+      <p diffing="unchanged" id="p1">A</p>
+      <p diffing="deleted" id="p2">B-delete</p>
+      <p diffing="unchanged" id="p3">C</p>
+      <list diffing="changed" id="l1">
+         <item diffing="unchanged" id="i1">one</item>
+         <item diffing="deleted" id="i2">two-delete</item>
+         <item diffing="unchanged" id="i3">three</item>
+      </list>
+   </section>
+</doc>
