@@ -3,6 +3,9 @@
 ID-based XML version compare for editor documents.  
 **Product overview:** see the [repository root README](../README.md).
 
+Grew out of the original XSLT experiment archived on branch
+[`original`](https://github.com/alexdd/XMLDifferExperiment/tree/original).
+
 ## Setup
 
 ```bash
