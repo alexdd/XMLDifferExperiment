@@ -56,7 +56,9 @@ auf jedes Element gestempelt, Edits von einfach → komplex).
 | L12–L13 | Wrap/Unwrap | Moved in gelöschtem Parent |
 | L15 | Insert vor Survivor | LCS statt Predecessor-Heuristik |
 | L17 | Nur Attribute | Attributvergleich + Dual/Marker |
-| L18 | Mixed Content | Dual-Snapshot wenn Textknoten am Element hängen |
+| L18 | Mixed Content | Dual-Snapshot nur bei anonymen Kind-Elementen; Text um `@id`-Kinder → JS `_diff_text` |
+| M01 | Feiner Mixed-Textdiff | Token-Align old/new → `_diff_text` statt Parent-Snapshot |
+| M02–M03 | Ignore-Set | Attribute/Elemente vor Diff strippen; Roundtrip gegen gefilterte Bäume |
 
 ## Was bewusst out-of-scope ist
 
@@ -67,7 +69,6 @@ Siehe `testdata/out-of-scope/`.
 ## Empfehlung für die vollständige Lösung im Produkt
 
 1. Editor stempelt `@id` auf jedes Element (bereits geplant).
-2. Diffing nutzt Analyze → Merge → Textdiff wie hier portiert.
+2. Diffing nutzt Analyze → Merge → Mixed-Refine → optional Word-Textdiff.
 3. Diff-Ausgabe bleibt read-only Visualisierung; kein Roundtrip in den Editor nötig.
-4. Optional später: feinerer Inline-Textdiff in Mixed Content statt Parent-Snapshot,
-   solange alle Elemente IDs behalten.
+4. Ignore-Set für Editor-Metadaten (`rev`, Draft-Kommentare, …) konfigurieren.
