@@ -1,0 +1,6 @@
+{
+  "name": "S1000D descriptive: reorder levelledPara",
+  "description": "Swap Brake pads (par-0002) and Brake lever (par-0003) order.",
+  "sourceDm": "DMC-BRAKE-AAA-DA1-00-00-00AA-041A-A_001-00_EN-US.XML",
+  "model": "S1000D-4.1-bike"
+}

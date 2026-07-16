@@ -1,0 +1,3 @@
+[submodule "vendor/s1000d-bike-mini-csdb-explorer"]
+	path = vendor/s1000d-bike-mini-csdb-explorer
+	url = https://github.com/sheeksha/s1000d-bike-mini-csdb-explorer.git

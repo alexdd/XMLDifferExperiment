@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content id="uid-0001">
+<description id="uid-0002">
+<levelledPara id="uid-0003">
+<title id="uid-0004">Physical description of a bicycle</title>
+<para id="uid-0005">A bicycle (refer to <internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001" internalRefId="fig-0001" internalRefTargetType="irtt01" id="uid-0006"/>) is a frame and a number of movable components with mechanical parts that are completely open. There are no covers or sheet metal panels that prevent access to the mechanical parts. Thus, you can disassemble the different components of a bicycle (refer to <internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0000" internalRefId="fig-0001-gra-0001-hot-0000" internalRefTargetType="irtt11" id="uid-0007"/>) to do: <randomList listItemPrefix="pf02" id="uid-0008">
+<listItem id="uid-0009">
+<para id="uid-0010">an inspection</para>
+</listItem>
+<listItem id="uid-0011">
+<para id="uid-0012">a maintenance task</para>
+</listItem>
+<listItem id="uid-0013">
+<para id="uid-0014">a repair task</para>
+</listItem>
+</randomList>
+</para>
+<figure id="fig-0001">
+<title id="uid-0015">Complete bicycle</title>
+<graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:actuate="onRequest" xlink:show="new" xlink:href="URN:S1000D:ICN-S1000DBIKE-AAA-D000000-0-U8025-00536-A-04-1" xlink:title="Complete bicycle" infoEntityIdent="ICN-S1000DBIKE-AAA-D000000-0-U8025-00536-A-04-1" id="uid-0016">
+<hotspot id="fig-0001-gra-0001-hot-0000" applicationStructureIdent="hot000" applicationStructureName="0" hotspotType="CALLOUT" hotspotTitle="BICYCLE" objectDescr="BICYCLE"/>
+<hotspot id="fig-0001-gra-0001-hot-0001" applicationStructureIdent="hot001" applicationStructureName="1" hotspotType="CALLOUT" hotspotTitle="BRAKE SUB-SYSTEM" objectDescr="BRAKE SUB-SYSTEM"/>
+<hotspot id="fig-0001-gra-0001-hot-0002" applicationStructureIdent="hot002" applicationStructureName="2" hotspotType="CALLOUT" hotspotTitle="GEAR SUB-SYSTEM" objectDescr="GEAR SUB-SYSTEM"/>
+<hotspot id="fig-0001-gra-0001-hot-0003" applicationStructureIdent="hot003" applicationStructureName="3" hotspotType="CALLOUT" hotspotTitle="WHEEL, ASSEMBLY FRONT" objectDescr="WHEEL, ASSEMBLY FRONT"/>
+<hotspot id="fig-0001-gra-0001-hot-0004" applicationStructureIdent="hot004" applicationStructureName="4" hotspotType="CALLOUT" hotspotTitle="PEDALS" objectDescr="PEDALS"/>
+<hotspot id="fig-0001-gra-0001-hot-0005" applicationStructureIdent="hot005" applicationStructureName="5" hotspotType="CALLOUT" hotspotTitle="CRANKS" objectDescr="CRANKS"/>
+<hotspot id="fig-0001-gra-0001-hot-0006" applicationStructureIdent="hot006" applicationStructureName="6" hotspotType="CALLOUT" hotspotTitle="CHAIN" objectDescr="CHAIN"/>
+<hotspot id="fig-0001-gra-0001-hot-0007" applicationStructureIdent="hot007" applicationStructureName="7" hotspotType="CALLOUT" hotspotTitle="WHEEL, ASSEMBLY REAR" objectDescr="WHEEL, ASSEMBLY REAR"/>
+<hotspot id="fig-0001-gra-0001-hot-0008" applicationStructureIdent="hot008" applicationStructureName="8" hotspotType="CALLOUT" hotspotTitle="SEAT, ASSEMBLY" objectDescr="SEAT, ASSEMBLY"/>
+<hotspot id="fig-0001-gra-0001-hot-0009" applicationStructureIdent="hot009" applicationStructureName="9" hotspotType="CALLOUT" hotspotTitle="FRAME ASSEMBLY" objectDescr="FRAME ASSEMBLY"/>
+<hotspot id="fig-0001-gra-0001-hot-0010" applicationStructureIdent="hot010" applicationStructureName="10" hotspotType="CALLOUT" hotspotTitle="HANDLE BAR STEM" objectDescr="HANDLE BAR STEM"/>
+<hotspot id="fig-0001-gra-0001-hot-0011" applicationStructureIdent="hot011" applicationStructureName="11" hotspotType="CALLOUT" hotspotTitle="HANDLE BAR" objectDescr="HANDLE BAR"/>
+</graphic>
+</figure>
+<para id="uid-0017">The parts that you can immediately identify on a bicycle are given in Table 1.</para>
+<table id="uid-0018">
+<title id="uid-0019">Bicycle parts</title>
+<tgroup cols="3" id="uid-0020">
+<colspec colname="1" colwidth="40*" id="uid-0021"/>
+<colspec colname="2" colwidth="30*" id="uid-0022"/>
+<colspec colname="3" colwidth="60*" id="uid-0023"/>
+<thead id="uid-0024">
+<row id="uid-0025">
+<entry id="uid-0026">
+<para id="uid-0027">Item</para>
+</entry>
+<entry id="uid-0028">
+<para id="uid-0029">Refer to</para>
+</entry>
+<entry id="uid-0030">
+<para id="uid-0031">Definition</para>
+</entry>
+</row>
+</thead>
+<tbody id="uid-0032">
+<row id="uid-0033">
+<entry id="uid-0034">
+<para id="uid-0035">Frame</para>
+</entry>
+<entry id="uid-0036">
+<para id="uid-0037">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0009" internalRefId="fig-0001-gra-0001-hot-0009" internalRefTargetType="irtt11" id="uid-0038"/>
+</para>
+</entry>
+<entry id="uid-0039">
+<para id="uid-0040">A bicycle frame is made of metal tubes that are welded together.</para>
+</entry>
+</row>
+<row id="uid-0041">
+<entry id="uid-0042">
+<para id="uid-0043">Wheels</para>
+</entry>
+<entry id="uid-0044"/>
+<entry id="uid-0045">
+<para id="uid-0046">The wheels include these parts: <randomList listItemPrefix="pf02" id="uid-0047">
+<listItem id="uid-0048">
+<para id="uid-0049">Hub</para>
+</listItem>
+<listItem id="uid-0050">
+<para id="uid-0051">Spokes</para>
+</listItem>
+<listItem id="uid-0052">
+<para id="uid-0053">Metal rim</para>
+</listItem>
+<listItem id="uid-0054">
+<para id="uid-0055">Rubber tire</para>
+</listItem>
+</randomList>
+</para>
+</entry>
+</row>
+<row id="uid-0056">
+<entry id="uid-0057">
+<para id="uid-0058">
+<randomList listItemPrefix="pf02" id="uid-0059">
+<listItem id="uid-0060">
+<para id="uid-0061">Rear wheel</para>
+</listItem>
+</randomList>
+</para>
+</entry>
+<entry id="uid-0062">
+<para id="uid-0063">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0007" internalRefId="fig-0001-gra-0001-hot-0007" internalRefTargetType="irtt11" id="uid-0064"/>
+</para>
+</entry>
+<entry id="uid-0065"/>
+</row>
+<row id="uid-0066">
+<entry id="uid-0067">
+<para id="uid-0068">
+<randomList listItemPrefix="pf02" id="uid-0069">
+<listItem id="uid-0070">
+<para id="uid-0071">Front wheel</para>
+</listItem>
+</randomList>
+</para>
+</entry>
+<entry id="uid-0072">
+<para id="uid-0073">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0003" internalRefId="fig-0001-gra-0001-hot-0003" internalRefTargetType="irtt11" id="uid-0074"/>
+</para>
+</entry>
+<entry id="uid-0075"/>
+</row>
+<row id="uid-0076">
+<entry id="uid-0077">
+<para id="uid-0078">Seat and seat post</para>
+</entry>
+<entry id="uid-0079">
+<para id="uid-0080">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0008" internalRefId="fig-0001-gra-0001-hot-0008" internalRefTargetType="irtt11" id="uid-0081"/>
+</para>
+</entry>
+<entry id="uid-0082">
+<para id="uid-0083">These install into the seat tube with a mechanism you can use to change the height.</para>
+</entry>
+</row>
+<row id="uid-0084">
+<entry id="uid-0085">
+<para id="uid-0086">Handle bars</para>
+</entry>
+<entry id="uid-0087">
+<para id="uid-0088">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0011" internalRefId="fig-0001-gra-0001-hot-0011" internalRefTargetType="irtt11" id="uid-0089"/>
+</para>
+</entry>
+<entry id="uid-0090">
+<para id="uid-0091">A horizontal bar that attaches to the stem with grips at the ends that attach to the brake levers and the shifters.</para>
+</entry>
+</row>
+<row id="uid-0092">
+<entry id="uid-0093">
+<para id="uid-0094">Handle bar stem</para>
+</entry>
+<entry id="uid-0095">
+<para id="uid-0096">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0010" internalRefId="fig-0001-gra-0001-hot-0010" internalRefTargetType="irtt11" id="uid-0097"/>
+</para>
+</entry>
+<entry id="uid-0098">
+<para id="uid-0099">This attaches the handle bar to the steering tube (head set).</para>
+</entry>
+</row>
+<row id="uid-0100">
+<entry id="uid-0101">
+<para id="uid-0102">Cranks</para>
+</entry>
+<entry id="uid-0103">
+<para id="uid-0104">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0005" internalRefId="fig-0001-gra-0001-hot-0005" internalRefTargetType="irtt11" id="uid-0105"/>
+</para>
+</entry>
+<entry id="uid-0106">
+<para id="uid-0107">A lever that extends from the bottom of the bracket to the pedal.</para>
+</entry>
+</row>
+<row id="uid-0108">
+<entry id="uid-0109">
+<para id="uid-0110">Pedals</para>
+</entry>
+<entry id="uid-0111">
+<para id="uid-0112">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0004" internalRefId="fig-0001-gra-0001-hot-0004" internalRefTargetType="irtt11" id="uid-0113"/>
+</para>
+</entry>
+<entry id="uid-0114">
+<para id="uid-0115">The two platforms for the feet that attach to the crank.</para>
+</entry>
+</row>
+<row id="uid-0116">
+<entry id="uid-0117">
+<para id="uid-0118">Chain</para>
+</entry>
+<entry id="uid-0119">
+<para id="uid-0120">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0006" internalRefId="fig-0001-gra-0001-hot-0006" internalRefTargetType="irtt11" id="uid-0121"/>
+</para>
+</entry>
+<entry id="uid-0122">
+<para id="uid-0123">A circular set of links that connect the chain ring to the cogs on the freewheel.</para>
+</entry>
+</row>
+<row id="uid-0124">
+<entry id="uid-0125">
+<para id="uid-0126">Gears</para>
+</entry>
+<entry id="uid-0127">
+<para id="uid-0128">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0002" internalRefId="fig-0001-gra-0001-hot-0002" internalRefTargetType="irtt11" id="uid-0129"/>
+</para>
+</entry>
+<entry id="uid-0130">
+<para id="uid-0131">The gears include: <randomList listItemPrefix="pf02" id="uid-0132">
+<listItem id="uid-0133">
+<para id="uid-0134">Front chain ring</para>
+</listItem>
+<listItem id="uid-0135">
+<para id="uid-0136">Rear freewheel</para>
+</listItem>
+<listItem id="uid-0137">
+<para id="uid-0138">Front and the rear derailleur</para>
+</listItem>
+<listItem id="uid-0139">
+<para id="uid-0140">Shift lever on the handle bars</para>
+</listItem>
+<listItem id="uid-0141">
+<para id="uid-0142">Cables</para>
+</listItem>
+</randomList>
+</para>
+</entry>
+</row>
+<row id="uid-0143">
+<entry id="uid-0144">
+<para id="uid-0145">Brakes</para>
+</entry>
+<entry id="uid-0146">
+<para id="uid-0147">
+<internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001-gra-0001-hot-0001" internalRefId="fig-0001-gra-0001-hot-0001" internalRefTargetType="irtt11" id="uid-0148"/>
+</para>
+</entry>
+<entry id="uid-0149">
+<para id="uid-0150">The brakes include: <randomList listItemPrefix="pf02" id="uid-0151">
+<listItem id="uid-0152">
+<para id="uid-0153">Actuators on the handlebars</para>
+</listItem>
+<listItem id="uid-0154">
+<para id="uid-0155">Brake cable</para>
+</listItem>
+<listItem id="uid-0156">
+<para id="uid-0157">Brake callipers</para>
+</listItem>
+<listItem id="uid-0158">
+<para id="uid-0159">Brake pads</para>
+</listItem>
+</randomList>
+</para>
+</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+</levelledPara>
+</description>
+</content>

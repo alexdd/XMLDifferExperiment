@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content id="uid-0001">
+<procedure id="uid-0002">
+<preliminaryRqmts id="uid-0003">
+<reqCondGroup id="uid-0004">
+<noConds id="uid-0005"/>
+</reqCondGroup>
+<reqPersons id="uid-0006">
+<person man="A" id="uid-0007">
+<personCategory personCategoryCode="Basic user" id="uid-0008"/>
+<trade id="uid-0009">Operator</trade>
+<estimatedTime unitOfMeasure="h" id="uid-0010">0,3</estimatedTime>
+</person>
+</reqPersons>
+<reqSupportEquips id="uid-0011">
+<noSupportEquips id="uid-0012"/>
+</reqSupportEquips>
+<reqSupplies id="uid-0013">
+<noSupplies id="uid-0014"/>
+</reqSupplies>
+<reqSpares id="uid-0015">
+<noSpares id="uid-0016"/>
+</reqSpares>
+<reqSafety id="uid-0017">
+<noSafety id="uid-0018"/>
+</reqSafety>
+</preliminaryRqmts>
+<mainProcedure id="uid-0019">
+<proceduralStep id="uid-0020">
+<para id="uid-0021">Put the bicycle in a vertical position.</para>
+</proceduralStep>
+<proceduralStep id="uid-0022">
+<para id="uid-0023">Hold the handle bars and push the bicycle forwards.</para>
+</proceduralStep>
+<proceduralStep id="uid-0024">
+<para id="uid-0025">Apply the brakes.</para>
+</proceduralStep>
+<proceduralStep id="uid-0026">
+<para id="uid-0027">Make sure that the wheels lock and the bicycle stops.</para>
+</proceduralStep>
+</mainProcedure>
+<closeRqmts id="uid-0028">
+<reqCondGroup id="uid-0029">
+<noConds id="uid-0030"/>
+</reqCondGroup>
+</closeRqmts>
+</procedure>
+</content>

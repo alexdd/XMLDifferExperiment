@@ -1,0 +1,6 @@
+{
+  "name": "S1000D large bike descriptive: delete section + insert + text",
+  "description": "Full-bike descriptive DM: delete a levelledPara, prepend Maintenance overview, append text to first para.",
+  "sourceDm": "DMC-S1000DBIKE-AAA-D00-00-00-00AA-041A-A_009-00_EN-US.XML",
+  "model": "S1000D-4.1-bike"
+}

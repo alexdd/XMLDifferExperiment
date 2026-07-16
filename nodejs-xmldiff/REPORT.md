@@ -6,14 +6,25 @@ Der Editor vergibt beim Einfügen für **jedes Element** eine stabile, eindeutig
 Diese IDs leben in den Dokumentversionen (nicht im Diff-Ausgabeformat). Diffing ist
 eine reine Ausgabe und fließt nicht zurück in den Editor.
 
-**Alle Kern-Testdaten (L01–L18) setzen diese Invariante voraus.** Fixtures ohne IDs
+**Alle Kern-Testdaten (`L*` und `S*`) setzen diese Invariante voraus.** Fixtures ohne IDs
 liegen unter `testdata/out-of-scope/` und sind nicht Teil der Default-Suite.
 
 ## Kurzfazit
 
 Unter der ID-Invariante ist der Port nach **Node.js + SaxonJS** für die progressive
-Suite **L01–L18 Roundtrip-grün**, inklusive tiefer Verschachtelung, Moves, Reorders,
-Wrap/Unwrap, Attribute und Mixed Content (Textknoten brauchen keine ID).
+Suite **L01–L18 + S01–S14 Roundtrip-grün**, inklusive S1000D-4.1-Bike-Inhalte
+(descriptive/procedural), tiefer Verschachtelung, Moves, Reorders, Wrap/Unwrap,
+Attribute und Mixed Content (Textknoten brauchen keine ID).
+
+## S1000D-Quellen
+
+Offizielles ASD „Bike sample data set“ liegt nur als ZIP vor, nicht als Git-Repo.
+Als Submodule eingebunden:
+
+`vendor/s1000d-bike-mini-csdb-explorer` → `data/S1000D_4-1_Bike_Samples/`
+
+Daraus generiert `npm run generate:s1000d` die Szenarien **S01–S14** (Editor-IDs
+auf jedes Element gestempelt, Edits von einfach → komplex).
 
 ## Ursprünglicher Algorithmus (Repo-Root)
 

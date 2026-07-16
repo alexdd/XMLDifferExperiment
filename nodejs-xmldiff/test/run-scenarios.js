@@ -23,7 +23,7 @@ function listLevels(dir) {
   return fs
     .readdirSync(dir)
     .filter((d) => fs.statSync(path.join(dir, d)).isDirectory())
-    .filter((d) => d.match(/^L\d+/))
+    .filter((d) => d.match(/^[LS]\d+/))
     .sort();
 }
 
