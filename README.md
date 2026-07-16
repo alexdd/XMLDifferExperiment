@@ -1,3 +1,9 @@
+> **Archived original experiment (2011–2013).**  
+> This branch keeps the first XSLT-based ID diff prototype (`diff.xsl`, `textdiff.xsl`).  
+> The maintained product lives on [`master`](https://github.com/alexdd/XMLDifferExperiment).
+
+---
+
 XMLDifferExperiment
 ===================
 
