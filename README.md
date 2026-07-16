@@ -1,49 +1,147 @@
-XMLDifferExperiment
-===================
+# XMLDiffer — ID-based XML version compare
 
-Experimental XML Diffing with XSLT
+**See every change. Trust every match.**
 
-One of UWE’s key features will be managing and comparing document versions. Whereas commercial solutions employ a rather scientific approach, see e.g. here and/or a rather complex one, see here … so called “diffing feature” in UWE will be implemented in a very simple way. UWE’s WYSIWYG editor is the only place where you can modify UWE documents. Thus if we assign an unique ID on each element that we insert (paragraphs, lists, tables, images, …) we will be able to use the following algorithm in order to mark changes when comparing two different versions of one document:
+XMLDiffer compares two versions of a structured document when your editor already
+knows what each element is. Stamp a unique `@id` on every paragraph, list item,
+table cell, or procedure step at insert time — and version compare becomes
+deterministic, fast, and faithful to authoring intent.
 
-FIRST STEP: analyze versions
+Built for WYSIWYG technical-documentation editors. Proven against S1000D and DITA
+fixtures. Implemented with XSLT 3.0 (SaxonJS) plus a thin Node.js pipeline for
+moves, mixed content, and ignore rules.
 
-    if there is an ID in the new version which does not exist in the old version, then mark the element with this ID as NEW
-    if there is an ID in the old version which does not exist in the new version, then mark the element with this ID as DELETED
-    if there is an ID which exists in both versions, then compare text content of both versions, and if content changed then mark element with this ID as CHANGED otherwise mark as UNCHANGED
+The runnable package lives in [`nodejs-xmldiff/`](nodejs-xmldiff/).
 
-At this point we have marked elements in both versions. But what we want to have is one single document in which all marked elements will be merged in correct order. Thus the next step will be merging old and new version. Actually this step reassembles to copying elements which have been marked as DELETED from the old version into the new version. The tricky part is putting these elements into the right place, but with some magic XPATH selectors we have successfully been coping with this problem.
+---
 
-SECOND STEP: merging
+## Why IDs change the game
 
-    traverse new version and if preceding-sibling of identical element (same ID) in old version is marked as DELETED then copy all direct preceding siblings which are marked as DELETED from old version into new version just before the current element.
+Generic XML diff tries to *guess* which nodes correspond across versions.
+That guesswork breaks on wraps, reorders, and cross-parent moves — the edits
+authors make every day.
 
-    when traversing new version: if all following-sibling elements of the current element are marked as DELETED in the old version, then copy this block of DELETED elements just after the current element
+XMLDiffer does not guess. **The editor identity is the match key.**
 
-Now we have one document with all elements marked. Everything could have been done using XSLT stylesheets .
+| Without stable IDs | With editor `@id` |
+|---|---|
+| Heuristic tree matching | Exact element identity |
+| False moves on simple inserts | LCS over child-ID sequences |
+| Opaque mixed-content blobs | Fine `_diff_text` markers around inlines |
+| Diff that “almost” roundtrips | Reconstruct old *and* new from one merge |
 
-THIRD STEP: copy old text of CHANGED elements into merged document in order to use Python’s difflib
+Diffing is an **output format** for review and history — it never writes back
+into the live document.
 
-    After this step each CHANGED element will occur twice in the merged document. like this:
+---
 
-    <elem diffing-status=”changed” diffing-version=”old”>[...] some deleted text [...]</elem>
-    <elem diffing-status=”changed” diffing-version=”new”>[...] [...]</elem>
+## What you get
 
-FOURTH STEP: use Python’s difflib in XSLT stylesheet extension call on merged document
+- **Structural truth** — new, deleted, changed, unchanged, and moved elements
+- **Cross-parent moves & sibling reorders** — LCS on identified child sequences
+- **Wrap / unwrap** — identity survives when authors regroup content
+- **Attribute awareness** — attribute-only edits with roundtrip restore markers
+- **Fine mixed-content text** — text around identified inlines, not whole-parent snapshots
+- **Configurable ignore set** — strip noise like `rev` or draft-only elements before compare
+- **Optional word-level display** — collapse paired markers to `<del>` / `<ins>` for UI
+- **Roundtrip-verified** — merge reconstructs both versions (canonical equality)
 
-    After this step each CHANGED element will occur only once and will contain tags inserted by Python extension call, like so:
+---
 
-    bla bla <del>some deleted text</del> bla bla
+## Quick start
 
-FIFTH STEP: a simple XML to HTML transformation will visualize all changes: red colored and crossed through text for deleted elements and green colored text for added elements.so far. But when detecting atomic text changes we will need to use Python’s difflib 
+```bash
+git submodule update --init --recursive
+cd nodejs-xmldiff
+npm install
+npm test
+```
+
+```js
+const { diffDocuments, roundtripCheck } = require('./src/diffEngine');
+
+const merged = await diffDocuments(oldXml, newXml, {
+  ignore: { attributes: ['rev'], elements: ['draft-comment'] },
+  textDiff: true, // word-level <del>/<ins> for display
+});
+
+const check = await roundtripCheck(oldXml, newXml);
+// check.ok === true when old and new reconstruct cleanly
+```
+
+Every element in both inputs must carry a unique `@id`. That is the product contract.
+
+---
+
+## Pipeline
+
+```
+old.xml + new.xml
+        │
+        ▼
+  ignore set (optional)
+        │
+        ▼
+  Analyze  →  Merge  →  Textdiff prep   (XSLT / SaxonJS)
+        │
+        ▼
+  Mixed-content refine   (Node — `_diff_text`)
+        │
+        ▼
+  Optional word diff     (display <del>/<ins>)
+        │
+        ▼
+   merge result  ──►  reconstruct old | new
+```
+
+---
+
+## Proven on real schemas
+
+| Suite | Focus |
+|---|---|
+| **L\*** | Synthetic ladder — text, nest, moves, wrap, attributes, mixed content |
+| **S\*** | S1000D 4.1 bike samples — descriptive & procedural |
+| **D\*** | DITA tasks, lists, figures, nested topics |
+| **X\*** | Deep invented stress cases |
+| **M\*** | Fine mixed textdiff + ignore-set scenarios |
+
+Sample data comes from git submodules under `vendor/`. Regenerate derived fixtures with:
+
+```bash
+cd nodejs-xmldiff && npm run generate:fixtures
+```
+
+Cases that violate the ID invariant are kept under `nodejs-xmldiff/testdata/out-of-scope/`
+for documentation only — not the default suite.
+
+Technical status notes: [`nodejs-xmldiff/REPORT.md`](nodejs-xmldiff/REPORT.md)
+
+---
+
+## Project layout
+
+```
+.
+├── LICENSE / NOTICE     LGPL-3.0-or-later (Tektur)
+├── diff.xsl             Original XSLT experiment
+└── nodejs-xmldiff/      Production port (SaxonJS + tests)
+    ├── src/             Engine, moves, mixed refine, ignore set
+    ├── xslt/            Analyze / merge / roundtrip
+    ├── test/            Unit + progressive scenario runner
+    └── testdata/        L* S* D* X* M* fixtures
+```
+
+---
 
 ## License
 
-XMLDiffer / XMLDifferExperiment is licensed under the
-**GNU Lesser General Public License v3.0 or later** (`LGPL-3.0-or-later`).
+**GNU Lesser General Public License v3.0 or later** (`LGPL-3.0-or-later`)
 
-Copyright (C) 2011–2026 Tektur — https://www.tekturcms.de
+Copyright (C) 2011–2026 Tektur — [www.tekturcms.de](https://www.tekturcms.de)
 
-See `LICENSE` and `NOTICE`. Historical Unicode data-file notices (if applicable)
-remain in `license.txt`.
+XMLDiffer is free software: you can redistribute and/or modify it under the
+LGPL. You may embed and use it from larger applications (including commercial
+products); changes to this library itself remain under the LGPL.
 
-The modern Node.js / SaxonJS port lives in [`nodejs-xmldiff/`](nodejs-xmldiff/). 
+Full text: [`LICENSE`](LICENSE) · Notices: [`NOTICE`](NOTICE)
