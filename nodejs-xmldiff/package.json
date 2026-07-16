@@ -9,7 +9,7 @@
   "scripts": {
     "test": "node test/run-scenarios.js",
     "test:level": "node test/run-scenarios.js",
-    "test:known-good": "node test/run-scenarios.js L01 && node test/run-scenarios.js L20",
+    "test:out-of-scope": "node test/run-scenarios.js --out-of-scope",
     "compile": "npx xslt3 -xsl:xslt/diff.xsl -export:sef/diff.sef.json -nogo && npx xslt3 -xsl:xslt/roundtrip.xsl -export:sef/roundtrip.sef.json -nogo"
   },
   "keywords": ["xml", "diff", "xslt", "saxon-js"],

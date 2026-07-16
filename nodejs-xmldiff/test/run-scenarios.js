@@ -3,8 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 const { roundtripCheck, compileAll } = require('../src/diffEngine');
+const { assertEditorDocumentIds } = require('../src/idInvariant');
 
 const DATA = path.join(__dirname, '..', 'testdata');
+const OUT_OF_SCOPE = path.join(DATA, 'out-of-scope');
 
 function loadPair(levelDir) {
   const oldXml = fs.readFileSync(path.join(levelDir, 'old.xml'), 'utf8');
@@ -16,11 +18,32 @@ function loadPair(levelDir) {
   return { oldXml, newXml, meta, levelDir };
 }
 
-async function runLevel(levelName) {
-  const levelDir = path.join(DATA, levelName);
+function listLevels(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((d) => fs.statSync(path.join(dir, d)).isDirectory())
+    .filter((d) => d.match(/^L\d+/))
+    .sort();
+}
+
+async function runLevel(levelName, levelDir, { enforceIds }) {
   const { oldXml, newXml, meta } = loadPair(levelDir);
   console.log(`\n=== ${levelName}: ${meta.name || meta.description || ''} ===`);
   if (meta.description) console.log(`  ${meta.description}`);
+
+  if (enforceIds) {
+    try {
+      assertEditorDocumentIds(oldXml, newXml);
+    } catch (err) {
+      if (err.code === 'ID_INVARIANT') {
+        console.log('  ID INVARIANT FAILED');
+        console.log(err.message);
+        return { levelName, ok: false, meta, invariantFailure: true };
+      }
+      throw err;
+    }
+  }
 
   const result = await roundtripCheck(oldXml, newXml);
 
@@ -62,28 +85,63 @@ async function runLevel(levelName) {
 }
 
 async function main() {
-  const only = process.argv[2]; // optional level name
+  const args = process.argv.slice(2);
+  const runOutOfScope = args.includes('--out-of-scope');
+  const only = args.find((a) => !a.startsWith('--'));
+
   await compileAll();
 
-  const levels = fs
-    .readdirSync(DATA)
-    .filter((d) => fs.statSync(path.join(DATA, d)).isDirectory())
-    .filter((d) => d.match(/^L\d+/))
-    .sort();
+  /** @type {{ name: string, dir: string, enforceIds: boolean }[]} */
+  let jobs = listLevels(DATA).map((name) => ({
+    name,
+    dir: path.join(DATA, name),
+    enforceIds: true,
+  }));
 
-  const selected = only ? levels.filter((l) => l === only || l.startsWith(only)) : levels;
-  if (selected.length === 0) {
+  if (runOutOfScope) {
+    jobs = listLevels(OUT_OF_SCOPE).map((name) => ({
+      name,
+      dir: path.join(OUT_OF_SCOPE, name),
+      enforceIds: false,
+    }));
+  }
+
+  if (only) {
+    // allow addressing either in-scope or out-of-scope by name
+    const inScope = jobs.filter((j) => j.name === only || j.name.startsWith(only));
+    if (inScope.length) {
+      jobs = inScope;
+    } else {
+      const oos = listLevels(OUT_OF_SCOPE)
+        .filter((n) => n === only || n.startsWith(only))
+        .map((name) => ({
+          name,
+          dir: path.join(OUT_OF_SCOPE, name),
+          enforceIds: false,
+        }));
+      jobs = oos;
+    }
+  }
+
+  if (jobs.length === 0) {
     console.error('No levels found' + (only ? ` matching ${only}` : ''));
     process.exit(2);
   }
 
+  if (!runOutOfScope && !only) {
+    console.log(
+      'Product invariant: every element in fixtures has a unique @id (editor documents).'
+    );
+  }
+
   const results = [];
-  for (const level of selected) {
-    const r = await runLevel(level);
+  for (const job of jobs) {
+    const r = await runLevel(job.name, job.dir, { enforceIds: job.enforceIds });
     results.push(r);
-    // Stop on first unexpected failure when running the progressive suite
     if (!r.ok && !only) {
-      console.log(`\nStopped at ${level} (progressive suite: do not continue past unexpected failure).`);
+      console.log(
+        `\nStopped at ${job.name} (progressive suite: do not continue past unexpected failure).`
+      );
       break;
     }
   }
@@ -92,7 +150,9 @@ async function main() {
   const expectedLimits = results.filter((r) => r.expectedFailure);
   console.log(
     `\nSummary: ${results.length - failed.length}/${results.length} passed` +
-      (expectedLimits.length ? ` (${expectedLimits.length} expected methodological limit(s))` : '')
+      (expectedLimits.length
+        ? ` (${expectedLimits.length} expected methodological limit(s))`
+        : '')
   );
   process.exit(failed.length ? 1 : 0);
 }
