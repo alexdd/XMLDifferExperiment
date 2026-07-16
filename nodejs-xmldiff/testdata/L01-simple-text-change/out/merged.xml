@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<merge-result>
-   <doc diffing="changed" id="d1">
-      <p id="p1" diffing="changed" diffing-version="old">Hello world</p>
-      <p diffing="changed" id="p1" diffing-version="new">Hello universe</p>
-   </doc>
-</merge-result>
