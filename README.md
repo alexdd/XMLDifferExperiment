@@ -13,6 +13,15 @@ moves, mixed content, and ignore rules.
 
 The runnable package lives in [`nodejs-xmldiff/`](nodejs-xmldiff/).
 
+### Origins
+
+The algorithm grew out of an earlier XSLT experiment in this repository
+(`diff.xsl` / `textdiff.xsl`, Analyze → Merge → Textdiff). That historical
+snapshot is preserved on the [`original`](https://github.com/alexdd/XMLDifferExperiment/tree/original)
+branch. XMLDiffer is the production evolution of that idea: same ID-based
+matching principle, extended for moves, mixed content, ignore rules, and
+roundtrip-tested against real schemas.
+
 ---
 
 ## Why IDs change the game
@@ -124,13 +133,15 @@ Technical status notes: [`nodejs-xmldiff/REPORT.md`](nodejs-xmldiff/REPORT.md)
 ```
 .
 ├── LICENSE / NOTICE     LGPL-3.0-or-later (Tektur)
-├── diff.xsl             Original XSLT experiment
-└── nodejs-xmldiff/      Production port (SaxonJS + tests)
+├── vendor/              Schema sample submodules
+└── nodejs-xmldiff/      XMLDiffer package (SaxonJS + tests)
     ├── src/             Engine, moves, mixed refine, ignore set
     ├── xslt/            Analyze / merge / roundtrip
     ├── test/            Unit + progressive scenario runner
     └── testdata/        L* S* D* X* M* fixtures
 ```
+
+Archived original experiment: branch [`original`](https://github.com/alexdd/XMLDifferExperiment/tree/original).
 
 ---
 

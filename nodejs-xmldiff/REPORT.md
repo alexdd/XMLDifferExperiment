@@ -28,7 +28,10 @@ It is included via submodule:
 From that tree, `npm run generate:s1000d` builds scenarios **S01–S14** (editor IDs
 stamped on every element; edits from simple → complex).
 
-## Original algorithm (repo root)
+## Original algorithm (branch `original`)
+
+The first XSLT experiment (`diff.xsl` / `textdiff.xsl`) is archived on branch
+[`original`](https://github.com/alexdd/XMLDifferExperiment/tree/original):
 
 1. **Analyze** – by `@id`: `new` / `deleted` / `changed` / `unchanged`
 2. **Merge** – place deleted siblings into the new version via preceding/trailing anchors

@@ -6,8 +6,8 @@ Licensed under the GNU Lesser General Public License v3.0 or later
 
 Project / contact: https://www.tekturcms.de
 
-Original experiment (diff.xsl) by Alex Duesel (2011); continued and
-extended for Tektur CCMS.
+Original XSLT experiment (diff.xsl / textdiff.xsl, 2011) by Alex Duesel;
+archived on branch `original`. Continued and extended for Tektur CCMS.
 
 Third-party sample data under vendor/ retains its own licenses
 (see each submodule README).
