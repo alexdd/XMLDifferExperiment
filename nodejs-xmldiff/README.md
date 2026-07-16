@@ -1,79 +1,155 @@
-# Node.js / SaxonJS XML Diff Port
+# XMLDiffer — ID-based XML version compare
 
-Port and progressive exploration of the ID-based XSLT XML diffing algorithm from the repository root (`diff.xsl`, `README.md`).
+**See every change. Trust every match.**
 
-## Product invariant
+XMLDiffer compares two versions of a structured document when your editor already
+knows what each element is. Stamp a unique `@id` on every paragraph, list item,
+table cell, or procedure step at insert time — and version compare becomes
+deterministic, fast, and faithful to authoring intent.
 
-Every **element** in editor documents has a unique `@id` (assigned at insert time).
-Diffing is an output format only; it does not write back into the editor.
-Default fixtures (`L*`, `S*`, `D*`, `X*`, `M*`) all satisfy this. Cases without element ids live under
-`testdata/out-of-scope/`.
+Built for WYSIWYG technical-documentation editors. Proven against S1000D and DITA
+fixtures. Implemented with XSLT 3.0 (SaxonJS) plus a thin Node.js pipeline for
+moves, mixed content, and ignore rules.
 
-## Mixed-content refine + ignore set
+---
 
-- **Fine mixed-content textdiff** (`src/mixedContentDiff.js`): after the structural XSLT merge, identified parents with text + `@id` children are realigned from old/new. Text changes become `_diff_text` markers (`diffing-version` old/new) instead of dual-snapshotting the whole parent. Anonymous (no-id) element children still use XSLT dual-snapshots.
-- **Configurable ignore set** (`src/ignoreSet.js`): pass `{ attributes: [...], elements: [...] }` to `runDiff` / `roundtripCheck` / `diffDocuments`, or set `"ignore"` in a scenario `meta.json`. Ignored attrs/elements are stripped before compare; roundtrip expects the filtered trees.
+## Why IDs change the game
+
+Generic XML diff tries to *guess* which nodes correspond across versions.
+That guesswork breaks on wraps, reorders, and cross-parent moves — the edits
+authors make every day.
+
+XMLDiffer does not guess. **The editor identity is the match key.**
+
+| Without stable IDs | With editor `@id` |
+|---|---|
+| Heuristic tree matching | Exact element identity |
+| False moves on simple inserts | LCS over child-ID sequences |
+| Opaque mixed-content blobs | Fine `_diff_text` markers around inlines |
+| Diff that “almost” roundtrips | Reconstruct old *and* new from one merge |
+
+Diffing is an **output format** for review and history — it never writes back
+into the live document.
+
+---
+
+## What you get
+
+- **Structural truth** — new, deleted, changed, unchanged, and moved elements
+- **Cross-parent moves & sibling reorders** — LCS on identified child sequences
+- **Wrap / unwrap** — identity survives when authors regroup content
+- **Attribute awareness** — attribute-only edits with roundtrip restore markers
+- **Fine mixed-content text** — text around identified inlines, not whole-parent snapshots
+- **Configurable ignore set** — strip noise like `rev` or draft-only elements before compare
+- **Optional word-level display** — collapse paired markers to `<del>` / `<ins>` for UI
+- **Roundtrip-verified** — merge reconstructs both versions (canonical equality)
+
+---
+
+## Quick start
+
+```bash
+git submodule update --init --recursive
+cd nodejs-xmldiff
+npm install
+npm test
+```
 
 ```js
 const { diffDocuments, roundtripCheck } = require('./src/diffEngine');
 
-await diffDocuments(oldXml, newXml, {
+const merged = await diffDocuments(oldXml, newXml, {
   ignore: { attributes: ['rev'], elements: ['draft-comment'] },
-  textDiff: true, // collapse paired markers to <del>/<ins>
+  textDiff: true, // word-level <del>/<ins> for display
 });
+
+const check = await roundtripCheck(oldXml, newXml);
+// check.ok === true when old and new reconstruct cleanly
 ```
 
-## Sample data submodules
+Every element in both inputs must carry a unique `@id`. That is the product contract.
 
-```bash
-git submodule update --init --recursive
+---
+
+## Pipeline
+
+```
+old.xml + new.xml
+        │
+        ▼
+  ignore set (optional)
+        │
+        ▼
+  Analyze  →  Merge  →  Textdiff prep   (XSLT / SaxonJS)
+        │
+        ▼
+  Mixed-content refine   (Node — `_diff_text`)
+        │
+        ▼
+  Optional word diff     (display <del>/<ins>)
+        │
+        ▼
+   merge result  ──►  reconstruct old | new
 ```
 
-| Submodule | Source |
+---
+
+## Proven on real schemas
+
+| Suite | Focus |
 |---|---|
-| `vendor/s1000d-bike-mini-csdb-explorer` | S1000D 4.1 Bike Samples |
-| `vendor/dita-test-cases` | [dita-community/dita-test-cases](https://github.com/dita-community/dita-test-cases) (Apache-2.0) |
-| `vendor/metadita-sampledocs` | [robander/metadita-sampledocs](https://github.com/robander/metadita-sampledocs) (Apache-2.0) |
+| **L\*** | Synthetic ladder — text, nest, moves, wrap, attributes, mixed content |
+| **S\*** | S1000D 4.1 bike samples — descriptive & procedural |
+| **D\*** | DITA tasks, lists, figures, nested topics |
+| **X\*** | Deep invented stress cases |
+| **M\*** | Fine mixed textdiff + ignore-set scenarios |
+
+Sample data comes from git submodules (S1000D bike explorer, DITA test cases,
+metadita samples). Regenerate derived fixtures with:
 
 ```bash
-cd nodejs-xmldiff
-npm run generate:fixtures   # rebuild S* + D* + X* from vendor samples
+npm run generate:fixtures
 ```
 
-## Setup
+Cases that violate the ID invariant are kept under `testdata/out-of-scope/` for
+documentation only — not the default suite.
 
-```bash
-# from repo root
-git submodule update --init --recursive
-cd nodejs-xmldiff
-npm install
-npm test                    # unit tests + scenario roundtrips
+---
+
+## API surface
+
+| Function | Purpose |
+|---|---|
+| `runDiff(old, new, options?)` | Structural merge (+ mixed refine) |
+| `diffDocuments(old, new, options?)` | Full pipeline including optional word diff |
+| `roundtripCheck(old, new, options?)` | Verify reconstruct(old) / reconstruct(new) |
+| `reconstruct(merged, 'old' \| 'new')` | Project one side from the merge |
+
+**Options**
+
+- `ignore: { attributes?: string[], elements?: string[] }` — strip before compare
+- `textDiff: boolean` — emit display-oriented `<del>` / `<ins>`
+- `refineMixed: boolean` — fine mixed-content pass (default `true`)
+- `wordDiff: boolean` — word-split inside refine (when not using `textDiff`)
+
+Scenario fixtures can declare `"ignore"` in `meta.json` the same way.
+
+---
+
+## Project layout
+
+```
+nodejs-xmldiff/
+  src/           Engine, moves, mixed refine, ignore set, prep helpers
+  xslt/          Analyze / merge / roundtrip (XSLT 3.0)
+  test/          Unit tests + progressive scenario runner
+  testdata/      L* S* D* X* M* fixtures
+  vendor/        Schema sample submodules
+  REPORT.md      Technical status and design notes
 ```
 
-## Run tests
+---
 
-```bash
-npm test                       # unit + L*/S*/D*/X*/M* scenarios
-npm run test:unit              # JS + XSLT function tests
-npm run test:scenarios         # progressive roundtrips only
-npm run test:level -- M01      # one level
-npm run generate:fixtures      # regenerate from submodules
-```
+## License
 
-## Layout
-
-- `xslt/diff-lib.xsl` – shared XSLT functions (unit-tested)
-- `xslt/diff.xsl` / `roundtrip.xsl` – analyze / merge / reconstruct
-- `xslt/test-diff-lib.xsl` – XSLT function test harness
-- `src/*.js` – SaxonJS driver, LCS moves, mixed refine, ignore set, prep helpers
-- `test/unit/` – Node unit tests
-- `testdata/L*` – synthetic ladder
-- `testdata/S*` – S1000D bike-derived
-- `testdata/D*` – DITA sample-derived
-- `testdata/X*` – invented deep/mixed stress cases
-- `testdata/M*` – fine mixed-content + ignore-set scenarios
-- `REPORT.md` – analysis and recommendations
-
-## Roundtrip criterion
-
-`diff(old, new)` → merge → reconstruct `old` / `new` → canonical XML equality.
+LGPL-3.0-or-later — see the repository root license.

@@ -1,7 +1,7 @@
 {
   "name": "nodejs-xmldiff",
   "version": "1.0.0",
-  "description": "ID-based XML diffing with SaxonJS (port of repository XSLT algorithm)",
+  "description": "XMLDiffer — ID-based XML version compare for editor documents (SaxonJS + XSLT)",
   "main": "src/diffEngine.js",
   "directories": {
     "test": "test"

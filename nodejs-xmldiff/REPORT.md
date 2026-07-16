@@ -1,74 +1,77 @@
-# Abschlussreport: ID-basiertes XML Diffing (XSLT → Node.js / SaxonJS)
+# Status report: ID-based XML diffing (XSLT → Node.js / SaxonJS)
 
-## Produktannahme
+## Product assumption
 
-Der Editor vergibt beim Einfügen für **jedes Element** eine stabile, eindeutige `@id`.
-Diese IDs leben in den Dokumentversionen (nicht im Diff-Ausgabeformat). Diffing ist
-eine reine Ausgabe und fließt nicht zurück in den Editor.
+The editor assigns a stable, unique `@id` to **every element** at insert time.
+Those IDs live in the document versions (not in the diff output format). Diffing is
+a read-only output and never writes back into the editor.
 
-**Alle Kern-Testdaten (`L*` und `S*`) setzen diese Invariante voraus.** Fixtures ohne IDs
-liegen unter `testdata/out-of-scope/` und sind nicht Teil der Default-Suite.
+**All core fixtures (`L*`, `S*`, `D*`, `X*`, `M*`) assume this invariant.** Fixtures without IDs
+live under `testdata/out-of-scope/` and are not part of the default suite.
 
-## Kurzfazit
+## Summary
 
-Unter der ID-Invariante ist der Port nach **Node.js + SaxonJS** für die progressive
-Suite **L01–L18 + S01–S14 Roundtrip-grün**, inklusive S1000D-4.1-Bike-Inhalte
-(descriptive/procedural), tiefer Verschachtelung, Moves, Reorders, Wrap/Unwrap,
-Attribute und Mixed Content (Textknoten brauchen keine ID).
+Under the ID invariant, the **Node.js + SaxonJS** port is **roundtrip-green** for the progressive
+suite **L01–L18, S01–S14, D01–D10, X01–X04, M01–M03**, including S1000D 4.1 bike content
+(descriptive/procedural), deep nesting, moves, reorders, wrap/unwrap,
+attributes, and mixed content (text nodes do not need an ID).
 
-## S1000D-Quellen
+## S1000D sources
 
-Offizielles ASD „Bike sample data set“ liegt nur als ZIP vor, nicht als Git-Repo.
-Als Submodule eingebunden:
+The official ASD “Bike sample data set” is distributed only as a ZIP, not as a Git repo.
+It is included via submodule:
 
 `vendor/s1000d-bike-mini-csdb-explorer` → `data/S1000D_4-1_Bike_Samples/`
 
-Daraus generiert `npm run generate:s1000d` die Szenarien **S01–S14** (Editor-IDs
-auf jedes Element gestempelt, Edits von einfach → komplex).
+From that tree, `npm run generate:s1000d` builds scenarios **S01–S14** (editor IDs
+stamped on every element; edits from simple → complex).
 
-## Ursprünglicher Algorithmus (Repo-Root)
+## Original algorithm (repo root)
 
-1. **Analyze** – per `@id`: `new` / `deleted` / `changed` / `unchanged`
-2. **Merge** – gelöschte Geschwister per preceding/trailing-Anker in die neue Version
-3. **Textdiff** – geänderte PCDATA-Leaves doppelt ausgeben, dann Zeichen-Diff
-4. Voraussetzung: *every node must have a unique identifier* (Editor-Elemente)
+1. **Analyze** – by `@id`: `new` / `deleted` / `changed` / `unchanged`
+2. **Merge** – place deleted siblings into the new version via preceding/trailing anchors
+3. **Textdiff** – emit changed PCDATA leaves twice, then run character/word diff
+4. Precondition: *every node must have a unique identifier* (editor elements)
 
 ## Port (`nodejs-xmldiff/`)
 
-| Komponente | Rolle |
+| Component | Role |
 |---|---|
-| `xslt/diff.xsl` | Analyze + Merge + Textdiff-Prep (XSLT 3.0, SaxonJS) |
-| `xslt/roundtrip.xsl` | Rekonstruktion old/new aus dem Merge |
-| `src/moveDetect.js` | LCS-basierte Move-Erkennung (Child-ID-Sequenzen) |
-| `src/idInvariant.js` | Prüft eindeutige `@id` auf allen Elementen |
-| `src/diffEngine.js` | SaxonJS-Treiber, jsdiff für Wort-Diff |
-| `testdata/L01…L18` | Progressive Roundtrip-Szenarien (mit IDs) |
-| `testdata/out-of-scope/` | Dokumentiert Grenzen ohne IDs (nicht Default) |
+| `xslt/diff.xsl` | Analyze + Merge + Textdiff prep (XSLT 3.0, SaxonJS) |
+| `xslt/roundtrip.xsl` | Reconstruct old/new from the merge |
+| `src/moveDetect.js` | LCS-based move detection (child-ID sequences) |
+| `src/mixedContentDiff.js` | Fine mixed-content alignment → `_diff_text` markers |
+| `src/ignoreSet.js` | Strip ignored attributes/elements before compare |
+| `src/idInvariant.js` | Assert unique `@id` on every element |
+| `src/diffEngine.js` | SaxonJS driver, optional word-level display diff |
+| `testdata/L01…L18` | Progressive roundtrip scenarios (with IDs) |
+| `testdata/S*`, `D*`, `X*`, `M*` | Domain and feature scenarios |
+| `testdata/out-of-scope/` | Documents limits without IDs (not default) |
 
-## Erweiterungen entlang der Testleiter
+## Extensions along the test ladder
 
-| Level | Fall | Erweiterung |
+| Level | Case | Extension |
 |---|---|---|
-| L01–L05 | Text, Sibling-Delete/Insert, Nested | Basis-Port |
-| L06 | Alle Kinder ersetzt | Absent-Children ohne Survivor-Anker |
-| L09 | Move über Parents | `diffing=moved` + Ghost an alter Stelle |
-| L10 | Sibling-Reorder | LCS der Child-ID-Sequenzen |
-| L12–L13 | Wrap/Unwrap | Moved in gelöschtem Parent |
-| L15 | Insert vor Survivor | LCS statt Predecessor-Heuristik |
-| L17 | Nur Attribute | Attributvergleich + Dual/Marker |
-| L18 | Mixed Content | Dual-Snapshot nur bei anonymen Kind-Elementen; Text um `@id`-Kinder → JS `_diff_text` |
-| M01 | Feiner Mixed-Textdiff | Token-Align old/new → `_diff_text` statt Parent-Snapshot |
-| M02–M03 | Ignore-Set | Attribute/Elemente vor Diff strippen; Roundtrip gegen gefilterte Bäume |
+| L01–L05 | Text, sibling delete/insert, nested | Baseline port |
+| L06 | All children replaced | Absent children without survivor anchors |
+| L09 | Move across parents | `diffing=moved` + ghost at old location |
+| L10 | Sibling reorder | LCS of child-ID sequences |
+| L12–L13 | Wrap/unwrap | Moved nodes inside a deleted parent |
+| L15 | Insert before survivor | LCS instead of predecessor heuristic |
+| L17 | Attributes only | Attribute compare + dual/marker |
+| L18 | Mixed content | Dual-snapshot only for anonymous child elements; text around `@id` children → JS `_diff_text` |
+| M01 | Fine mixed textdiff | Token-align old/new → `_diff_text` instead of parent snapshot |
+| M02–M03 | Ignore set | Strip attributes/elements before diff; roundtrip against filtered trees |
 
-## Was bewusst out-of-scope ist
+## Intentionally out of scope
 
-Ohne Element-`@id` (anonyme Elemente / ganz ohne IDs) kann Analyze/Merge nicht
-korrelieren. Das widerspricht der Produktannahme und wird nicht als Kernpfad getestet.
-Siehe `testdata/out-of-scope/`.
+Without element `@id` (anonymous elements / no IDs at all), Analyze/Merge cannot
+correlate nodes. That violates the product assumption and is not tested as a core path.
+See `testdata/out-of-scope/`.
 
-## Empfehlung für die vollständige Lösung im Produkt
+## Product guidance
 
-1. Editor stempelt `@id` auf jedes Element (bereits geplant).
-2. Diffing nutzt Analyze → Merge → Mixed-Refine → optional Word-Textdiff.
-3. Diff-Ausgabe bleibt read-only Visualisierung; kein Roundtrip in den Editor nötig.
-4. Ignore-Set für Editor-Metadaten (`rev`, Draft-Kommentare, …) konfigurieren.
+1. Editor stamps `@id` on every element (planned).
+2. Diffing uses Analyze → Merge → Mixed refine → optional word textdiff.
+3. Diff output stays a read-only visualization; no write-back into the editor.
+4. Configure an ignore set for editor metadata (`rev`, draft comments, …).
