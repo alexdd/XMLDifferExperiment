@@ -1,5 +1,7 @@
 # Status report: ID-based XML diffing (XSLT → Node.js / SaxonJS)
 
+**License:** LGPL-3.0-or-later · **Copyright:** Tektur · **Contact:** https://www.tekturcms.de
+
 ## Product assumption
 
 The editor assigns a stable, unique `@id` to **every element** at insert time.

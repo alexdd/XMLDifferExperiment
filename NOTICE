@@ -1,0 +1,13 @@
+XMLDiffer / XMLDifferExperiment
+Copyright (C) 2011–2026 Tektur
+
+Licensed under the GNU Lesser General Public License v3.0 or later
+(LGPL-3.0-or-later). See the file LICENSE for the full license text.
+
+Project / contact: https://www.tekturcms.de
+
+Original experiment (diff.xsl) by Alex Duesel (2011); continued and
+extended for Tektur CCMS.
+
+Third-party sample data under vendor/ retains its own licenses
+(see each submodule README).

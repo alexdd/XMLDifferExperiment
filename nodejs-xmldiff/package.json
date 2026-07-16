@@ -2,6 +2,8 @@
   "name": "nodejs-xmldiff",
   "version": "1.0.0",
   "description": "XMLDiffer — ID-based XML version compare for editor documents (SaxonJS + XSLT)",
+  "author": "Tektur (https://www.tekturcms.de)",
+  "homepage": "https://www.tekturcms.de",
   "main": "src/diffEngine.js",
   "directories": {
     "test": "test"

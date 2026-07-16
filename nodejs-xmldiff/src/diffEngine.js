@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * XMLDiffer engine — ID-based XML version compare.
+ * Copyright (C) 2011–2026 Tektur — https://www.tekturcms.de
+ * SPDX-License-Identifier: LGPL-3.0-or-later
+ */
+
 const fs = require('fs');
 const path = require('path');
 const SaxonJS = require('saxon-js');

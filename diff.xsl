@@ -7,13 +7,14 @@
 #
 #
 #
-#    Copyright (C) 2011           by Alex Duesel <alex@alex-duesel.de>
-#                                        homepage: http://www.mandarine.tv
-#                                        See file license.txt for licensing issues
+#    Copyright (C) 2011           by Alex Duesel
+#    Copyright (C) 2011–2026      Tektur — https://www.tekturcms.de
+#                                        See LICENSE / NOTICE for licensing
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Lesser General Public License as published by
-#    the Free Software Foundation, either version 3 of the License.
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of

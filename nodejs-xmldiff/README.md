@@ -152,4 +152,12 @@ nodejs-xmldiff/
 
 ## License
 
-LGPL-3.0-or-later — see the repository root license.
+**GNU Lesser General Public License v3.0 or later** (`LGPL-3.0-or-later`)
+
+Copyright (C) 2011–2026 Tektur — [www.tekturcms.de](https://www.tekturcms.de)
+
+XMLDiffer is free software: you can redistribute and/or modify it under the
+LGPL. You may embed and use it from larger applications (including commercial
+products); changes to this library itself remain under the LGPL.
+
+Full text: [`LICENSE`](../LICENSE) · Notices: [`NOTICE`](../NOTICE)
