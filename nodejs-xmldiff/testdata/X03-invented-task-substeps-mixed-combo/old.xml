@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task id="x03-task">
+  <title id="x03-title">Complex procedure</title>
+  <taskbody id="x03-body">
+    <prereq id="x03-prereq"><p id="x03-prereq-p">Tools ready</p></prereq>
+    <steps id="x03-steps">
+      <step id="x03-s1">
+        <cmd id="x03-c1">Open the <uicontrol id="x03-ui1">Settings</uicontrol> panel.</cmd>
+        <info id="x03-i1"><p id="x03-i1p">Use the admin account.</p></info>
+        <substeps id="x03-sub">
+          <substep id="x03-ss1"><cmd id="x03-ss1c">Click <uicontrol id="x03-ui2">Advanced</uicontrol>.</cmd></substep>
+          <substep id="x03-ss2"><cmd id="x03-ss2c">Enable logging.</cmd></substep>
+          <substep id="x03-ss3"><cmd id="x03-ss3c">Apply changes.</cmd></substep>
+        </substeps>
+      </step>
+      <step id="x03-s2">
+        <cmd id="x03-c2">Restart the service.</cmd>
+      </step>
+      <step id="x03-s3">
+        <cmd id="x03-c3">Verify status is <b id="x03-b1">RUNNING</b>.</cmd>
+      </step>
+    </steps>
+  </taskbody>
+</task>

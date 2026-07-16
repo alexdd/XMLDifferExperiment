@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <a id="a1">
+    <b id="b1">
+      <c id="c1">
+        <d id="d2">
+          <e id="e4">other</e>
+          <e id="e5">brand-new-deep</e>
+        </d>
+        <d id="d1a">
+          <e id="e3">leaf-three-changed</e>
+          <e id="e1">leaf-one</e>
+        </d>
+      </c>
+      <b id="b2">
+        <c id="c2">
+          <d id="d3">
+            <e id="e2">leaf-two</e>
+          </d>
+        </c>
+      </b>
+    </b>
+  </a>
+</doc>

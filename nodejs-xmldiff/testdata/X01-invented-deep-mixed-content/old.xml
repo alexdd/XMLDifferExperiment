@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topic id="x01-root">
+  <title id="x01-title">Mixed content stress</title>
+  <body id="x01-body">
+    <section id="x01-s1">
+      <title id="x01-s1-t">Overview</title>
+      <p id="x01-p1">Start with <b id="x01-b1">bold</b> and a <ph id="x01-ph1">phrase</ph>.</p>
+      <p id="x01-p2">See also <xref id="x01-x1" href="#x01-s2">details</xref> below.</p>
+    </section>
+    <section id="x01-s2">
+      <title id="x01-s2-t">Details</title>
+      <p id="x01-p3">Nested <i id="x01-i1">italic <ph id="x01-ph2">inner phrase</ph></i> text.</p>
+      <ul id="x01-ul">
+        <li id="x01-li1"><p id="x01-lip1">Item one with <codeph id="x01-c1">code()</codeph></p></li>
+        <li id="x01-li2"><p id="x01-lip2">Item two</p></li>
+      </ul>
+    </section>
+  </body>
+</topic>

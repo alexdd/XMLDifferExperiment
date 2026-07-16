@@ -1,0 +1,4 @@
+{
+  "name": "Delete anonymous (no @id) element",
+  "description": "Hard limit: anonymous middle paragraph deleted. No id → cannot mark deleted or place a ghost via sibling-anchor merge. Parent dual-snapshot may not trigger because new tree has no anonymous child."
+}

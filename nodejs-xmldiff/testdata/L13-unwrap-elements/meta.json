@@ -1,0 +1,4 @@
+{
+  "name": "Unwrap elements from deleted parent",
+  "description": "Inverse of L12: group g1 deleted; p2/p3 move up to become direct children of s1."
+}

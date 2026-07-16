@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <draft-comment id="c1">internal note B</draft-comment>
+  <p id="p1">Visible changed</p>
+  <draft-comment id="c3">only in new</draft-comment>
+</doc>

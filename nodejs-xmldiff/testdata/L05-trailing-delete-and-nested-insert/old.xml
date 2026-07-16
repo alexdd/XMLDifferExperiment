@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <section id="s1">
+    <p id="p1">Lead</p>
+    <p id="p2">Middle</p>
+    <p id="p3">Tail-delete</p>
+    <note id="n1">Footnote-delete</note>
+  </section>
+</doc>

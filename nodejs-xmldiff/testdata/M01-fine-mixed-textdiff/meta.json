@@ -1,0 +1,4 @@
+{
+  "name": "Fine mixed-content textdiff",
+  "description": "Only trailing text changes around stable identified inline elements; expect _diff_text markers, not parent dual-snapshot."
+}

@@ -1,0 +1,6 @@
+{
+  "name": "No @id attributes anywhere",
+  "description": "Fundamental limit of the methodology: without stable ids the analyze step marks nothing; merge cannot place deletes; dual-snapshot never triggers. This violates the algorithm's stated precondition.",
+  "expectedFailure": true,
+  "failureReason": "ID-based analyze/merge requires stable @id on nodes; without any ids the methodology cannot correlate or reconstruct the old document."
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <chapter id="c1">
+    <section id="s1">
+      <title id="t1">One</title>
+      <block id="b1">
+        <p id="p1">Keep</p>
+        <p id="p2">Change me</p>
+        <p id="p3">Delete me</p>
+      </block>
+      <block id="b2">
+        <list id="l1">
+          <item id="i1">
+            <p id="p4">Deep keep</p>
+          </item>
+          <item id="i2">
+            <p id="p5">Deep delete</p>
+          </item>
+        </list>
+      </block>
+    </section>
+  </chapter>
+</doc>

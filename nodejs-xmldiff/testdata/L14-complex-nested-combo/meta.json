@@ -1,0 +1,4 @@
+{
+  "name": "Complex nested combo",
+  "description": "Section reorder; list moves s1→s2; item reorder+delete i2; wrap p1; delete p2; text changes on t1 and p5; insert p7."
+}

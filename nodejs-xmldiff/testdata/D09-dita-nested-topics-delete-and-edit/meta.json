@@ -1,0 +1,6 @@
+{
+  "name": "DITA nested topics: delete deep topic + edit root p",
+  "description": "metadita nesting/topics.dita structural delete + text.",
+  "source": "topics.dita",
+  "model": "DITA"
+}

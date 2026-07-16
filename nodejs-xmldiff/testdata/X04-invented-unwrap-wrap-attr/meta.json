@@ -1,0 +1,5 @@
+{
+  "name": "Invented: unwrap section, wrap paras, lang attr change",
+  "description": "Promote section children, wrap p2/p3, change xml:lang.",
+  "model": "invented-DITA-like"
+}

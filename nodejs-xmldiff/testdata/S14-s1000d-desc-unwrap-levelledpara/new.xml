@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content id="uid-0001">
+<description id="uid-0002">
+<levelledPara id="uid-0003">
+<title id="uid-0004">Brake system</title>
+<para id="uid-0005">The most important part of the bicycle is the brake system. Only a minimum maintenance of the brake system is necessary. But, when a problem does occur, make sure you to do the necessary maintenance as quickly as possible. If you do not do this the bicycle will be dangerous to use.</para>
+<para id="uid-0006">There are nine different types of brake systems. The one found on most bicycles is the cantilever brake (refer to <internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#par-0001" internalRefId="par-0001" internalRefTargetType="irtt07" id="uid-0007"/>).</para>
+<levelledPara id="par-0001">
+<title id="uid-0008">Cantilever brake</title>
+<para id="uid-0009">The brake system (refer to <internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0001" internalRefId="fig-0001" internalRefTargetType="irtt01" id="uid-0010"/>) has these primary components: <randomList listItemPrefix="pf01" id="uid-0011">
+<listItem id="uid-0012">
+<para id="uid-0013">the brake lever (refer to <internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#par-0003" internalRefId="par-0003" internalRefTargetType="irtt07" id="uid-0014"/>)</para>
+</listItem>
+<listItem id="uid-0015">
+<para id="uid-0016">the brake cable</para>
+</listItem>
+<listItem id="uid-0017">
+<para id="uid-0018">the brake arm</para>
+</listItem>
+<listItem id="uid-0019">
+<para id="uid-0020">the brake clamp (also known as callipers)</para>
+</listItem>
+<listItem id="uid-0021">
+<para id="uid-0022">the brake pads (refer to <internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#par-0002" internalRefId="par-0002" internalRefTargetType="irtt07" id="uid-0023"/>)</para>
+</listItem>
+</randomList>
+</para>
+<figure id="fig-0001">
+<title id="uid-0024">Cantilever brake with straddle cable</title>
+<graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:actuate="onRequest" xlink:show="new" xlink:href="URN:S1000D:ICN-S1000DBIKE-AAA-DA10000-0-U8025-00512-A-04-1" xlink:title="Cantilever brake with straddle cable" infoEntityIdent="ICN-S1000DBIKE-AAA-DA10000-0-U8025-00512-A-04-1" id="uid-0025"/>
+</figure>
+<para id="uid-0026">A cable that goes from the brake levers on the handlebars pulls the two levers on the brakes together. This presses the brake pads against the outer rim of the wheel, which decreases the speed of the bicycle.</para>
+</levelledPara>
+<title id="uid-0027">Brake pads</title><para id="uid-0028">There are four brake pads (refer to <internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0002" internalRefId="fig-0002" internalRefTargetType="irtt01" id="uid-0029"/>) on the bicycle. Two are found on the front wheel and two on the rear wheel. The brake pads are made out of hard wearing rubber. The pads press against the rim of the wheel to cause friction when the you operate the brake levers.</para><figure id="fig-0002">
+<title id="uid-0030">Exploded diagram of a brake</title>
+<graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:actuate="onRequest" xlink:show="new" xlink:href="URN:S1000D:ICN-S1000DBIKE-AAA-DA10000-0-U8025-00513-A-04-1" xlink:title="Exploded diagram of a brake" infoEntityIdent="ICN-S1000DBIKE-AAA-DA10000-0-U8025-00513-A-04-1" id="uid-0031"/>
+</figure>
+<levelledPara id="par-0003">
+<title id="uid-0032">Brake lever</title>
+<para id="uid-0033">The brake levers (refer to <internalRef xmlns:xlink="http://www.w3.org/1999/xlink" xlink:actuate="onRequest" xlink:show="replace" xlink:href="#fig-0003" internalRefId="fig-0003" internalRefTargetType="irtt01" id="uid-0034"/>) are easily damaged. The lever is installed in the mount. A clamp bolt holds the mount. This bolt is not visible because it is found in the mount. The lever turns on a lever pivot bolt. The adjuster lock nut holds the brake cable. This lock nut adjusts the tension of the cable.</para>
+<figure id="fig-0003">
+<title id="uid-0035">Typical components of a mountain bicycle lever</title>
+<graphic xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:actuate="onRequest" xlink:show="new" xlink:href="URN:S1000D:ICN-S1000DBIKE-AAA-DA10000-0-U8025-00514-A-04-1" xlink:title="Typical components of a mountain bicycle lever" infoEntityIdent="ICN-S1000DBIKE-AAA-DA10000-0-U8025-00514-A-04-1" id="uid-0036"/>
+</figure>
+<para id="uid-0037">The left brake lever holds the brake pads on the front wheel and the right brake pads hold the brakes on the rear wheel.</para>
+</levelledPara>
+</levelledPara>
+</description>
+</content>

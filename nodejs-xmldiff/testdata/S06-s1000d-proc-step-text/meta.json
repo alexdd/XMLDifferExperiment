@@ -1,0 +1,6 @@
+{
+  "name": "S1000D procedural: change step text",
+  "description": "Brake manual-test procedure; edit third proceduralStep para.",
+  "sourceDm": "DMC-BRAKE-AAA-DA1-00-00-00AA-341A-A_001-00_EN-US.XML",
+  "model": "S1000D-4.1-bike"
+}

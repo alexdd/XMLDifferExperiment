@@ -1,0 +1,4 @@
+{
+  "name": "Insert shifts predecessor id",
+  "description": "Insert p4 between p1 and p2. p2 did not move, but its preceding sibling id changes (A→p4), so predecessor heuristic may false-positive mark it moved."
+}

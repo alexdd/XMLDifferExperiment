@@ -1,0 +1,6 @@
+{
+  "name": "DITA task: move choicetable across steps",
+  "description": "Cross-parent move of choicetable + cmd text edit.",
+  "source": "tasktables.dita",
+  "model": "DITA"
+}

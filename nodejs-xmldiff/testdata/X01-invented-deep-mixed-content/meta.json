@@ -1,0 +1,5 @@
+{
+  "name": "Invented: deep mixed content + list churn + para move",
+  "description": "Synthetic DITA-like topic: edit mixed para, rename bold, delete/insert li, move xref para across sections.",
+  "model": "invented-DITA-like"
+}

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topic id="x02-root">
+  <title id="x02-title">Deep hierarchy</title>
+  <body id="x02-body">
+    <section id="x02-l1">
+      <title id="x02-l1-t">L1</title>
+      <section id="x02-l2">
+        <title id="x02-l2-t">L2</title>
+        <section id="x02-l3">
+          <title id="x02-l3-t">L3</title>
+          <section id="x02-l4">
+            <title id="x02-l4-t">L4</title>
+            <section id="x02-l5">
+              <title id="x02-l5-t">L5</title>
+              <p id="x02-p-deep">Deep paragraph</p>
+              <note id="x02-note" type="caution">
+                <p id="x02-note-p">Watch this</p>
+              </note>
+              <simpletable id="x02-tbl">
+                <sthead id="x02-sth">
+                  <stentry id="x02-h1">A</stentry>
+                  <stentry id="x02-h2">B</stentry>
+                </sthead>
+                <strow id="x02-r1">
+                  <stentry id="x02-r1c1">1</stentry>
+                  <stentry id="x02-r1c2">2</stentry>
+                </strow>
+                <strow id="x02-r2">
+                  <stentry id="x02-r2c1">3</stentry>
+                  <stentry id="x02-r2c2">4</stentry>
+                </strow>
+              </simpletable>
+            </section>
+          </section>
+        </section>
+      </section>
+      <p id="x02-tail">Trailing L1 para</p>
+    </section>
+  </body>
+</topic>

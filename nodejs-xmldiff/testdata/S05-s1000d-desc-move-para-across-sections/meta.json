@@ -1,0 +1,6 @@
+{
+  "name": "S1000D descriptive: move para across levelledPara",
+  "description": "Move trailing brake-lever para into brake-pads section.",
+  "sourceDm": "DMC-BRAKE-AAA-DA1-00-00-00AA-041A-A_001-00_EN-US.XML",
+  "model": "S1000D-4.1-bike"
+}

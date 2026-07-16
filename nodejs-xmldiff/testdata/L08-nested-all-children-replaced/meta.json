@@ -1,0 +1,4 @@
+{
+  "name": "Nested all-children-replaced",
+  "description": "L06 pattern nested: block b1 keeps id but all children replaced; sibling block b2 unchanged."
+}

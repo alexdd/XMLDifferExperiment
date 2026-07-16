@@ -1,0 +1,4 @@
+{
+  "name": "Attribute-only change",
+  "description": "p1 text unchanged but class/lang attributes change. Original algorithm only compares string(.) so may miss attribute diffs; roundtrip old may keep new attrs."
+}

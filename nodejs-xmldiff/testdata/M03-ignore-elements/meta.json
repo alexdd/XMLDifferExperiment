@@ -1,0 +1,7 @@
+{
+  "name": "Ignore element set",
+  "description": "draft-comment elements are stripped before diff; only p1 text change remains for comparison/roundtrip.",
+  "ignore": {
+    "elements": ["draft-comment"]
+  }
+}

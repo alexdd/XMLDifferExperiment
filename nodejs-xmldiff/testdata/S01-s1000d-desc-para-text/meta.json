@@ -1,0 +1,6 @@
+{
+  "name": "S1000D descriptive: single para text change",
+  "description": "Brake descriptive DM content; change first <para> text. Source: DMC-BRAKE-AAA-DA1-00-00-00AA-041A-A_001-00_EN-US.XML",
+  "sourceDm": "DMC-BRAKE-AAA-DA1-00-00-00AA-041A-A_001-00_EN-US.XML",
+  "model": "S1000D-4.1-bike"
+}

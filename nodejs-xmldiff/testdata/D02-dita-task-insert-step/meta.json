@@ -1,0 +1,6 @@
+{
+  "name": "DITA task: insert step",
+  "description": "Append a new step under steps.",
+  "source": "task-warehouse-01.dita",
+  "model": "DITA"
+}

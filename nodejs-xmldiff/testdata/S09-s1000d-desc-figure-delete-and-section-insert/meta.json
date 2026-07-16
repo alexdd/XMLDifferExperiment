@@ -1,0 +1,6 @@
+{
+  "name": "S1000D descriptive: delete figure + insert section + text edit",
+  "description": "Remove fig-0001, insert Safety note levelledPara, edit cantilever para wording.",
+  "sourceDm": "DMC-BRAKE-AAA-DA1-00-00-00AA-041A-A_001-00_EN-US.XML",
+  "model": "S1000D-4.1-bike"
+}

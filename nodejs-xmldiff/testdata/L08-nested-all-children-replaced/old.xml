@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <chapter id="c1">
+    <section id="s1">
+      <block id="b1">
+        <p id="p1">Inner old A</p>
+        <p id="p2">Inner old B</p>
+      </block>
+      <block id="b2">
+        <p id="p3">Other keep</p>
+      </block>
+    </section>
+  </chapter>
+</doc>

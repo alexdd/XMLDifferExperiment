@@ -1,0 +1,4 @@
+{
+  "name": "Five-level deep structural churn",
+  "description": "Reorder d-nodes; move e2 out to new b2/c2/d3 path; delete nothing except reposition; change e3 text; insert e5."
+}

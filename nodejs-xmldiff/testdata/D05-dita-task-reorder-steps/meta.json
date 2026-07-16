@@ -1,0 +1,6 @@
+{
+  "name": "DITA task: reorder steps",
+  "description": "Move first step after the second.",
+  "source": "tasktables.dita",
+  "model": "DITA"
+}

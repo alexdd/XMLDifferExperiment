@@ -1,0 +1,7 @@
+{
+  "name": "Ignore attribute set",
+  "description": "rev attributes differ everywhere but are ignored; only p2 text change is compared. Roundtrip against filtered trees.",
+  "ignore": {
+    "attributes": ["rev"]
+  }
+}

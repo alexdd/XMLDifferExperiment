@@ -1,0 +1,6 @@
+{
+  "name": "S1000D procedural: prereq attrs/text + step move",
+  "description": "Change trade/estimatedTime; move last proceduralStep to front; edit another step text.",
+  "sourceDm": "DMC-BRAKE-AAA-DA1-00-00-00AA-341A-A_001-00_EN-US.XML",
+  "model": "S1000D-4.1-bike"
+}

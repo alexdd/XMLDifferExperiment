@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task id="tasktables">
+    <title id="uid-0001">Test choice tables</title>
+    <shortdesc id="uid-0002">simpler because they are on/off, no options</shortdesc>
+    <taskbody id="uid-0003">
+        <steps id="uid-0004">
+            <step id="uid-0005">
+                <cmd id="uid-0006">Give me a choice, with headers (updated)</cmd>
+                <choicetable frame="all" relcolwidth="1* 1*" id="choicetable_dnq_h5n_mnb">
+                    <chhead id="uid-0007">
+                        <choptionhd id="uid-0008">This is my option</choptionhd>
+                        <chdeschd id="uid-0009">This is my desc</chdeschd>
+                    </chhead>
+                    <chrow id="uid-0010">
+                        <choption id="uid-0011">a</choption>
+                        <chdesc id="uid-0012">b</chdesc>
+                    </chrow>
+                    
+                    <chrow id="uid-0016">
+                        <choption id="uid-0017">e</choption>
+                        <chdesc id="uid-0018">f</chdesc>
+                    </chrow>
+                </choicetable>
+            </step>
+            <step id="uid-0019">
+                <cmd id="uid-0020">Give me a choice, without headers</cmd>
+                <choicetable frame="all" relcolwidth="1* 1*" id="choicetable_gcr_h5n_mnb">
+                    <chrow id="uid-0021">
+                        <choption id="uid-0022">a</choption>
+                        <chdesc id="uid-0023">b</chdesc>
+                    </chrow>
+                    <chrow id="uid-0024">
+                        <choption id="uid-0025">c</choption>
+                        <chdesc id="uid-0026">d</chdesc>
+                    </chrow>
+                    <chrow id="uid-0027">
+                        <choption id="uid-0028">e</choption>
+                        <chdesc id="uid-0029">f</chdesc>
+                    </chrow>
+                </choicetable>
+            </step>
+        </steps>
+    </taskbody>
+</task>

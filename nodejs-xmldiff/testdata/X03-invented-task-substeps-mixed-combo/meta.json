@@ -1,0 +1,5 @@
+{
+  "name": "Invented: task substeps reorder + mixed cmd + info move + step replace",
+  "description": "Synthetic task: substep reorder, uicontrol rename in mixed cmd, move info, delete/insert steps.",
+  "model": "invented-DITA-like"
+}

@@ -36,6 +36,14 @@ FOURTH STEP: use Python’s difflib in XSLT stylesheet extension call on merged 
 
 FIFTH STEP: a simple XML to HTML transformation will visualize all changes: red colored and crossed through text for deleted elements and green colored text for added elements.so far. But when detecting atomic text changes we will need to use Python’s difflib 
 
-is licensed under the GNU Lesser General Public License, see file license.txt. Chinese group labels were extrachted from the Unicode Website, see UNICODE, INC. LICENSE AGREEMENT - DATA FILES AND SOFTWAREib
+## License
 
-XMLDifferExperiment is licensed under the GNU Lesser General Public License, see file license.txt. 
+XMLDiffer / XMLDifferExperiment is licensed under the
+**GNU Lesser General Public License v3.0 or later** (`LGPL-3.0-or-later`).
+
+Copyright (C) 2011–2026 Tektur — https://www.tekturcms.de
+
+See `LICENSE` and `NOTICE`. Historical Unicode data-file notices (if applicable)
+remain in `license.txt`.
+
+The modern Node.js / SaxonJS port lives in [`nodejs-xmldiff/`](nodejs-xmldiff/). 

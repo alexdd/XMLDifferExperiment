@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <chapter id="c1">
+    <section id="s1">
+      <title id="t1">One</title>
+      <block id="b1">
+        <p id="p1">Keep</p>
+        <p id="p2">Changed text</p>
+        <p id="p6">Inserted after change</p>
+      </block>
+      <block id="b2">
+        <list id="l1">
+          <item id="i1">
+            <p id="p4">Deep keep</p>
+            <note id="n1">New deep note</note>
+          </item>
+        </list>
+      </block>
+    </section>
+  </chapter>
+</doc>

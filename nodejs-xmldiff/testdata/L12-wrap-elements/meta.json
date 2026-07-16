@@ -1,0 +1,4 @@
+{
+  "name": "Wrap elements in new parent",
+  "description": "p2 and p3 get a new parent group g1; their parent id changes from s1 to g1 (structural wrap)."
+}

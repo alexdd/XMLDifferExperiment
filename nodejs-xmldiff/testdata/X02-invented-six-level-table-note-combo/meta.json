@@ -1,0 +1,5 @@
+{
+  "name": "Invented: 6-level nest + table reorder + note move + insert/delete",
+  "description": "Deep section tree with simpletable row reorder, note move, tail delete, new section insert.",
+  "model": "invented-DITA-like"
+}
