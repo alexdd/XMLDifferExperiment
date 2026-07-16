@@ -1,3 +1,9 @@
 [submodule "vendor/s1000d-bike-mini-csdb-explorer"]
 	path = vendor/s1000d-bike-mini-csdb-explorer
 	url = https://github.com/sheeksha/s1000d-bike-mini-csdb-explorer.git
+[submodule "vendor/dita-test-cases"]
+	path = vendor/dita-test-cases
+	url = https://github.com/dita-community/dita-test-cases.git
+[submodule "vendor/metadita-sampledocs"]
+	path = vendor/metadita-sampledocs
+	url = https://github.com/robander/metadita-sampledocs.git

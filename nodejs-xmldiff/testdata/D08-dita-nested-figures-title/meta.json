@@ -1,0 +1,6 @@
+{
+  "name": "DITA nested figures: edit innermost title",
+  "description": "metadita nesting/figures.dita deepest fig title.",
+  "source": "figures.dita",
+  "model": "DITA"
+}

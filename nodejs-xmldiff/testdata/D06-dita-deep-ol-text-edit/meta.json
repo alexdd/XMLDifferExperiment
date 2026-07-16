@@ -1,0 +1,6 @@
+{
+  "name": "DITA deep OL: edit deepest list item",
+  "description": "metadita nesting/olul.dita deepest <li> text change.",
+  "source": "vendor/metadita-sampledocs/nesting/olul.dita",
+  "model": "DITA"
+}

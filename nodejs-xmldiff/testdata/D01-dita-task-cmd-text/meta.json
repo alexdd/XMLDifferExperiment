@@ -1,0 +1,6 @@
+{
+  "name": "DITA task: change cmd text",
+  "description": "task-warehouse-01: edit step cmd text.",
+  "source": "vendor/dita-test-cases/.../task-warehouse-01.dita",
+  "model": "DITA"
+}

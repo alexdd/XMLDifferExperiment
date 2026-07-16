@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task id="task_dps_lh2_pv">
+    <title id="uid-0001">Task Warehouse Topic</title>
+    <shortdesc id="uid-0002">This is a task used as the target for content references. It is bound to the key
+    "task-warehouse-01".</shortdesc>
+    <taskbody id="uid-0003">
+        <context id="uid-0004">
+            <p id="uid-0005">This is the task</p>
+        </context>
+        <steps id="uid-0006">
+            <step id="step-01">
+        <cmd id="uid-0007">This is a revised step with the ID "step-01".</cmd>
+      </step>
+        </steps>
+    </taskbody>
+</task>

@@ -7,10 +7,14 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node test/run-scenarios.js",
+    "test": "npm run test:unit && npm run test:scenarios",
+    "test:unit": "node --test test/unit/**/*.test.js",
+    "test:scenarios": "node test/run-scenarios.js",
     "test:level": "node test/run-scenarios.js",
     "test:out-of-scope": "node test/run-scenarios.js --out-of-scope",
     "generate:s1000d": "node scripts/generate-s1000d-scenarios.js",
+    "generate:dita": "node scripts/generate-dita-scenarios.js",
+    "generate:fixtures": "npm run generate:s1000d && npm run generate:dita",
     "compile": "npx xslt3 -xsl:xslt/diff.xsl -export:sef/diff.sef.json -nogo && npx xslt3 -xsl:xslt/roundtrip.xsl -export:sef/roundtrip.sef.json -nogo"
   },
   "keywords": [

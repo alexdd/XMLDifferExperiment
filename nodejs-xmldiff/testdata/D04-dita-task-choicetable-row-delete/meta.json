@@ -1,0 +1,6 @@
+{
+  "name": "DITA task: choicetable row delete + cmd edit",
+  "description": "From metadita tasktables.dita.",
+  "source": "vendor/metadita-sampledocs/simpletables/tasktables.dita",
+  "model": "DITA"
+}

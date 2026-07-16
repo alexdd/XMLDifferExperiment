@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topic id="x04-root" xml:lang="en">
+  <title id="x04-title">Wrap unwrap</title>
+  <body id="x04-body">
+    <section id="x04-sec" outputclass="old">
+      <title id="x04-sec-t">Grouped</title>
+      <p id="x04-p1">Alpha</p>
+      <p id="x04-p2">Beta <ph id="x04-ph">middle</ph> gamma</p>
+      <p id="x04-p3">Delta</p>
+    </section>
+  </body>
+</topic>

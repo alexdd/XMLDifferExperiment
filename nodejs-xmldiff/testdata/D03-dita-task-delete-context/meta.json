@@ -1,0 +1,6 @@
+{
+  "name": "DITA task: delete context + title change",
+  "description": "Remove context block and rename title.",
+  "source": "task-warehouse-01.dita",
+  "model": "DITA"
+}

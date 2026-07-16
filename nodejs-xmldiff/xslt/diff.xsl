@@ -15,52 +15,8 @@
                 xmlns:local="urn:xmldiff:local"
                 exclude-result-prefixes="#all">
 
+    <xsl:import href="diff-lib.xsl"/>
     <xsl:output method="xml" indent="yes"/>
-
-    <!--
-      LCS-based moved ids computed in Node (moveDetect.js) and passed in.
-      Replaces the brittle preceding-sibling heuristic (false positives on L15).
-    -->
-    <xsl:param name="moved-ids" as="xs:string*" select="()"
-               xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
-
-    <xsl:function name="local:is-moved-id" as="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-        <xsl:param name="id" as="xs:string"/>
-        <xsl:sequence select="$id = $moved-ids"/>
-    </xsl:function>
-
-    <!-- Compare attributes except @id (and any diffing-* bookkeeping). -->
-    <xsl:function name="local:attrs-differ" as="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-        <xsl:param name="a" as="element()"/>
-        <xsl:param name="b" as="element()"/>
-        <xsl:variable name="a-atts" select="$a/@*[local-name() != 'id' and not(starts-with(local-name(), 'diffing'))]"/>
-        <xsl:variable name="b-atts" select="$b/@*[local-name() != 'id' and not(starts-with(local-name(), 'diffing'))]"/>
-        <xsl:sequence select="
-            count($a-atts) != count($b-atts)
-            or exists(
-              for $att in $a-atts
-              return if ($b/@*[node-name(.) = node-name($att)] = string($att))
-                     then ()
-                     else true()
-            )
-            or exists(
-              for $att in $b-atts
-              return if ($a/@*[node-name(.) = node-name($att)])
-                     then ()
-                     else true()
-            )"/>
-    </xsl:function>
-
-    <!-- absent from a parent's child axis in the other version: deleted or moved away -->
-    <xsl:function name="local:is-absent" as="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-        <xsl:param name="n" as="element()"/>
-        <xsl:sequence select="$n/@diffing = 'deleted' or $n/@diffing = 'moved'"/>
-    </xsl:function>
-
-    <xsl:function name="local:is-survivor" as="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-        <xsl:param name="n" as="element()"/>
-        <xsl:sequence select="$n/@diffing = 'changed' or $n/@diffing = 'unchanged'"/>
-    </xsl:function>
 
     <xsl:template match="@*" mode="#all">
         <xsl:copy/>
