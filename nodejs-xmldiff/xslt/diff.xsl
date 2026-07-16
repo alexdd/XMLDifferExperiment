@@ -226,11 +226,9 @@
     </xsl:template>
 
     <!--
-      L18/L19/L20: dual-snapshot a changed element when untracked content is involved:
-        - mixed content text nodes (no @id), or
-        - anonymous element children in NEW or OLD (L20: anonymous delete).
-      Falling back to a full element snapshot is the escape hatch when the
-      ID algorithm cannot name the node.
+      Dual-snapshot ONLY when anonymous (no @id) element children are involved.
+      Mixed content with identified element children is refined in Node
+      (mixedContentDiff.js) into fine-grained _diff_text markers.
     -->
     <xsl:template match="*[@diffing = 'changed']
                           [child::*]
@@ -243,9 +241,7 @@
         <xsl:variable name="old-elem"
                       select="$analyzed-root/descendant::old-version//*[@id = $y-id][1]"/>
         <xsl:choose>
-            <xsl:when test="text()[normalize-space()]
-                            or *[not(@id)]
-                            or exists($old-elem/*[not(@id)])">
+            <xsl:when test="*[not(@id)] or exists($old-elem/*[not(@id)])">
                 <xsl:for-each select="$old-elem">
                     <xsl:copy>
                         <xsl:copy-of select="@*[local-name() != 'diffing']"/>
@@ -261,6 +257,7 @@
                 </xsl:copy>
             </xsl:when>
             <xsl:otherwise>
+                <!-- identified children only (+ optional text): single node, JS refines text -->
                 <xsl:next-match/>
             </xsl:otherwise>
         </xsl:choose>

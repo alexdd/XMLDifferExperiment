@@ -37,6 +37,32 @@
     <!-- L17: attribute restore marker -->
     <xsl:template match="_diff_old_attrs" priority="20"/>
 
+    <!-- Fine mixed-content text markers from mixedContentDiff.js -->
+    <xsl:template match="_diff_text[@diffing-version = 'old']" priority="20">
+        <xsl:if test="$view = 'old'">
+            <xsl:value-of select="."/>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="_diff_text[@diffing-version = 'new']" priority="20">
+        <xsl:if test="$view = 'new'">
+            <xsl:value-of select="."/>
+        </xsl:if>
+    </xsl:template>
+
+    <!-- Display-oriented word diff markers: keep for new, strip del for old-ish reconstruct -->
+    <xsl:template match="del" priority="20">
+        <xsl:if test="$view = 'old'">
+            <xsl:value-of select="."/>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="ins" priority="20">
+        <xsl:if test="$view = 'new'">
+            <xsl:value-of select="."/>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template match="*[_diff_old_attrs]" priority="15">
         <xsl:copy>
             <xsl:choose>

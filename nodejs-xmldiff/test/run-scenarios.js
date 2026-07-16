@@ -23,7 +23,7 @@ function listLevels(dir) {
   return fs
     .readdirSync(dir)
     .filter((d) => fs.statSync(path.join(dir, d)).isDirectory())
-    .filter((d) => d.match(/^[LSDX]\d+/))
+    .filter((d) => d.match(/^[LSDXM]\d+/))
     .sort();
 }
 
@@ -45,7 +45,10 @@ async function runLevel(levelName, levelDir, { enforceIds }) {
     }
   }
 
-  const result = await roundtripCheck(oldXml, newXml);
+  const result = await roundtripCheck(oldXml, newXml, {
+    ignore: meta.ignore,
+    refineMixed: meta.refineMixed !== false,
+  });
 
   const outDir = path.join(levelDir, 'out');
   fs.mkdirSync(outDir, { recursive: true });

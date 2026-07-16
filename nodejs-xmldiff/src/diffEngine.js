@@ -6,6 +6,8 @@ const SaxonJS = require('saxon-js');
 const Diff = require('diff');
 const { wrapDiffingInput, canonicalizeXml, stripXmlDecl } = require('./xmlutil');
 const { findMovedIds } = require('./moveDetect');
+const { applyIgnoreSet, isEmptyIgnore } = require('./ignoreSet');
+const { refineMixedContent } = require('./mixedContentDiff');
 
 const XSLT_DIR = path.join(__dirname, '..', 'xslt');
 const SEF_DIR = path.join(__dirname, '..', 'sef');
@@ -22,18 +24,15 @@ async function ensureSef(xslName) {
     needsCompile = xslStat.mtimeMs > sefStat.mtimeMs;
   }
   if (needsCompile) {
-    // Use SaxonJS compile API (same as xslt3 CLI)
-    const result = await SaxonJS.transform(
+    await SaxonJS.transform(
       {
         stylesheetFileName: xslPath,
         destination: 'raw',
-        // Compiling to SEF:
         stylesheetBaseURI: xslPath,
       },
       'async'
     ).catch(() => null);
 
-    // Prefer xslt3 CLI for reliable SEF export
     const { execFileSync } = require('child_process');
     const xslt3 = require.resolve('xslt3/xslt3.js');
     execFileSync(
@@ -50,23 +49,42 @@ async function compileAll() {
   await ensureSef('roundtrip.xsl');
 }
 
-async function runDiff(oldXml, newXml) {
+/**
+ * @param {string} oldXml
+ * @param {string} newXml
+ * @param {{ ignore?: object, refineMixed?: boolean, wordDiff?: boolean }} [options]
+ */
+async function runDiff(oldXml, newXml, options = {}) {
+  const ignore = options.ignore;
+  const refineMixed = options.refineMixed !== false;
+  const wordDiff = Boolean(options.wordDiff);
+
+  let oldIn = oldXml;
+  let newIn = newXml;
+  if (ignore && !isEmptyIgnore(ignore)) {
+    oldIn = applyIgnoreSet(oldXml, ignore);
+    newIn = applyIgnoreSet(newXml, ignore);
+  }
+
   const sefPath = await ensureSef('diff.xsl');
-  const sourceText = wrapDiffingInput(oldXml, newXml);
-  const movedIds = findMovedIds(oldXml, newXml);
+  const sourceText = wrapDiffingInput(oldIn, newIn);
+  const movedIds = findMovedIds(oldIn, newIn);
   const output = await SaxonJS.transform(
     {
       stylesheetFileName: sefPath,
       sourceText,
       destination: 'serialized',
       stylesheetParams: {
-        // SaxonJS accepts a sequence via array for xs:string*
         'moved-ids': movedIds,
       },
     },
     'async'
   );
-  return output.principalResult;
+  let merged = output.principalResult;
+  if (refineMixed) {
+    merged = refineMixedContent(merged, oldIn, newIn, { wordDiff });
+  }
+  return merged;
 }
 
 async function reconstruct(mergedXml, view) {
@@ -88,31 +106,42 @@ async function reconstruct(mergedXml, view) {
 }
 
 /**
- * Apply character-level textdiff to paired old/new changed leaves.
- * Mirrors textdiff.xsl + Python difflib step using jsdiff.
+ * Apply character-level textdiff to paired old/new changed leaves and _diff_text pairs.
  */
 function applyTextDiff(mergedXml) {
-  // Replace consecutive old/new pairs with a single element containing <del>/<ins>
-  // Work on serialized XML with a simple regex-safe approach via DOM from SaxonJS.
-  // For robustness we use a lightweight scan.
+  let out = mergedXml;
+
+  // Fine mixed-content markers (`_diff_text` with diffing-version)
+  out = out.replace(
+    /<_diff_text\s+diffing-version="old">([\s\S]*?)<\/_diff_text>\s*<_diff_text\s+diffing-version="new">([\s\S]*?)<\/_diff_text>/g,
+    (_, oldText, newText) => wordDiffHtml(oldText, newText)
+  );
+
+  // Leaf dual elements
   const re =
     /<([A-Za-z_][\w.-]*)([^>]*)\sdiffing-version="old"([^>]*)>([\s\S]*?)<\/\1>\s*<\1([^>]*)\sdiffing-version="new"([^>]*)>([\s\S]*?)<\/\1>/g;
 
-  return mergedXml.replace(re, (match, name, a1, a2, oldText, b1, b2, newText) => {
+  out = out.replace(re, (match, name, a1, a2, oldText, b1, b2, newText) => {
     const attrs = `${a1}${a2}`
       .replace(/\sdiffing-version="old"/g, '')
       .replace(/\s+/g, ' ')
       .trim();
-    const parts = Diff.diffWords(oldText, newText);
-    let inner = '';
-    for (const part of parts) {
-      const escaped = escapeXml(part.value);
-      if (part.added) inner += `<ins>${escaped}</ins>`;
-      else if (part.removed) inner += `<del>${escaped}</del>`;
-      else inner += escaped;
-    }
-    return `<${name} ${attrs}>${inner}</${name}>`;
+    return `<${name} ${attrs}>${wordDiffHtml(oldText, newText)}</${name}>`;
   });
+
+  return out;
+}
+
+function wordDiffHtml(oldText, newText) {
+  const parts = Diff.diffWords(oldText, newText);
+  let inner = '';
+  for (const part of parts) {
+    const escaped = escapeXml(part.value);
+    if (part.added) inner += `<ins>${escaped}</ins>`;
+    else if (part.removed) inner += `<del>${escaped}</del>`;
+    else inner += escaped;
+  }
+  return inner;
 }
 
 function escapeXml(s) {
@@ -124,21 +153,41 @@ function escapeXml(s) {
 }
 
 /**
- * Full pipeline: structural diff + optional word-level textdiff.
- * Roundtrip checks use structural merge (before word textdiff).
+ * Full pipeline: structural diff + mixed refine + optional word-level textdiff.
  */
-async function diffDocuments(oldXml, newXml, { textDiff = false } = {}) {
-  let merged = await runDiff(oldXml, newXml);
+async function diffDocuments(oldXml, newXml, options = {}) {
+  const { textDiff = false, ignore, wordDiff = false } = options;
+  let merged = await runDiff(oldXml, newXml, {
+    ignore,
+    refineMixed: true,
+    wordDiff: wordDiff && !textDiff,
+  });
   if (textDiff) merged = applyTextDiff(merged);
   return merged;
 }
 
-async function roundtripCheck(oldXml, newXml) {
-  const merged = await runDiff(oldXml, newXml);
+/**
+ * Roundtrip check. When ignore is set, both sides are filtered first and
+ * reconstruction is compared to the filtered originals.
+ */
+async function roundtripCheck(oldXml, newXml, options = {}) {
+  const ignore = options.ignore;
+  let oldExpect = oldXml;
+  let newExpect = newXml;
+  if (ignore && !isEmptyIgnore(ignore)) {
+    oldExpect = applyIgnoreSet(oldXml, ignore);
+    newExpect = applyIgnoreSet(newXml, ignore);
+  }
+
+  const merged = await runDiff(oldXml, newXml, {
+    ignore,
+    refineMixed: options.refineMixed !== false,
+    wordDiff: false, // roundtrip needs _diff_text duals, not display del/ins
+  });
   const gotOld = await reconstruct(merged, 'old');
   const gotNew = await reconstruct(merged, 'new');
-  const oldOk = canonicalizeXml(gotOld) === canonicalizeXml(oldXml);
-  const newOk = canonicalizeXml(gotNew) === canonicalizeXml(newXml);
+  const oldOk = canonicalizeXml(gotOld) === canonicalizeXml(oldExpect);
+  const newOk = canonicalizeXml(gotNew) === canonicalizeXml(newExpect);
   return {
     ok: oldOk && newOk,
     oldOk,
@@ -146,8 +195,8 @@ async function roundtripCheck(oldXml, newXml) {
     merged,
     gotOld,
     gotNew,
-    expectedOld: canonicalizeXml(oldXml),
-    expectedNew: canonicalizeXml(newXml),
+    expectedOld: canonicalizeXml(oldExpect),
+    expectedNew: canonicalizeXml(newExpect),
     actualOld: canonicalizeXml(gotOld),
     actualNew: canonicalizeXml(gotNew),
   };
