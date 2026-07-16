@@ -1,0 +1,4 @@
+{
+  "name": "Sibling reorder",
+  "description": "Same parent, same children, different order (p3 moved before p1/p2). Parent id unchanged; pure permutation."
+}

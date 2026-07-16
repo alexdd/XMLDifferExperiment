@@ -1,0 +1,4 @@
+{
+  "name": "Move element across parents",
+  "description": "Same id p2 moves from section s1 to section s2. ID still exists in both docs so not marked deleted; old parent loses it without a deleted marker."
+}

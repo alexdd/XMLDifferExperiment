@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <section id="s1">
+    <p id="p1">Stays in s1</p>
+    <p id="p2">I will move to s2</p>
+  </section>
+  <section id="s2">
+    <p id="p3">Already in s2</p>
+  </section>
+</doc>

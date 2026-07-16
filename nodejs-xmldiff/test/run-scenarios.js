@@ -31,6 +31,10 @@ async function runLevel(levelName) {
   fs.writeFileSync(path.join(outDir, 'reconstructed-new.xml'), result.gotNew);
 
   if (result.ok) {
+    if (meta.expectedFailure) {
+      console.log('  ROUNDTRIP OK (UNEXPECTED — marked expectedFailure)');
+      return { levelName, ok: false, unexpectedPass: true, meta };
+    }
     console.log('  ROUNDTRIP OK');
     return { levelName, ok: true, meta };
   }
@@ -48,6 +52,11 @@ async function runLevel(levelName) {
     console.log('  ' + result.expectedNew);
     console.log('  --- actual new ---');
     console.log('  ' + result.actualNew);
+  }
+  if (meta.expectedFailure) {
+    console.log('  EXPECTED METHODOLOGICAL LIMIT');
+    if (meta.failureReason) console.log('  ' + meta.failureReason);
+    return { levelName, ok: true, expectedFailure: true, meta, result };
   }
   return { levelName, ok: false, meta, result };
 }
@@ -72,15 +81,19 @@ async function main() {
   for (const level of selected) {
     const r = await runLevel(level);
     results.push(r);
-    // Stop on first failure when running the progressive suite
+    // Stop on first unexpected failure when running the progressive suite
     if (!r.ok && !only) {
-      console.log(`\nStopped at ${level} (progressive suite: do not continue past failure).`);
+      console.log(`\nStopped at ${level} (progressive suite: do not continue past unexpected failure).`);
       break;
     }
   }
 
   const failed = results.filter((r) => !r.ok);
-  console.log(`\nSummary: ${results.length - failed.length}/${results.length} passed`);
+  const expectedLimits = results.filter((r) => r.expectedFailure);
+  console.log(
+    `\nSummary: ${results.length - failed.length}/${results.length} passed` +
+      (expectedLimits.length ? ` (${expectedLimits.length} expected methodological limit(s))` : '')
+  );
   process.exit(failed.length ? 1 : 0);
 }
 

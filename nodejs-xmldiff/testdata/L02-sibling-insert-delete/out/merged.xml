@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<doc diffing="changed" id="d1">
-   <p diffing="unchanged" id="p1">Alpha</p>
-   <p diffing="new" id="p4">Delta-new</p>
-   <p diffing="deleted" id="p2">Bravo</p>
-   <p diffing="unchanged" id="p3">Charlie</p>
-</doc>
+<merge-result>
+   <doc diffing="changed" id="d1">
+      <p diffing="unchanged" id="p1">Alpha</p>
+      <p diffing="new" id="p4">Delta-new</p>
+      <p diffing="deleted" id="p2">Bravo</p>
+      <p diffing="unchanged" id="p3">Charlie</p>
+   </doc>
+</merge-result>

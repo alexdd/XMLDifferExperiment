@@ -5,6 +5,7 @@ const path = require('path');
 const SaxonJS = require('saxon-js');
 const Diff = require('diff');
 const { wrapDiffingInput, canonicalizeXml, stripXmlDecl } = require('./xmlutil');
+const { findMovedIds } = require('./moveDetect');
 
 const XSLT_DIR = path.join(__dirname, '..', 'xslt');
 const SEF_DIR = path.join(__dirname, '..', 'sef');
@@ -52,11 +53,16 @@ async function compileAll() {
 async function runDiff(oldXml, newXml) {
   const sefPath = await ensureSef('diff.xsl');
   const sourceText = wrapDiffingInput(oldXml, newXml);
+  const movedIds = findMovedIds(oldXml, newXml);
   const output = await SaxonJS.transform(
     {
       stylesheetFileName: sefPath,
       sourceText,
       destination: 'serialized',
+      stylesheetParams: {
+        // SaxonJS accepts a sequence via array for xs:string*
+        'moved-ids': movedIds,
+      },
     },
     'async'
   );

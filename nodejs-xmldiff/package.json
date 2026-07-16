@@ -1,17 +1,19 @@
 {
   "name": "nodejs-xmldiff",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "ID-based XML diffing with SaxonJS (port of repository XSLT algorithm)",
+  "main": "src/diffEngine.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/run-scenarios.js",
+    "test:level": "node test/run-scenarios.js",
+    "test:known-good": "node test/run-scenarios.js L01 && node test/run-scenarios.js L20",
+    "compile": "npx xslt3 -xsl:xslt/diff.xsl -export:sef/diff.sef.json -nogo && npx xslt3 -xsl:xslt/roundtrip.xsl -export:sef/roundtrip.sef.json -nogo"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["xml", "diff", "xslt", "saxon-js"],
+  "license": "LGPL-3.0-or-later",
   "dependencies": {
     "diff": "^9.0.0",
     "saxon-js": "^2.7.0",

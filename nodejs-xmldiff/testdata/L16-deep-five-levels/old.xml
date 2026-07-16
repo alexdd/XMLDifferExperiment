@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <a id="a1">
+    <b id="b1">
+      <c id="c1">
+        <d id="d1a">
+          <e id="e1">leaf-one</e>
+          <e id="e2">leaf-two</e>
+          <e id="e3">leaf-three</e>
+        </d>
+        <d id="d2">
+          <e id="e4">other</e>
+        </d>
+      </c>
+    </b>
+  </a>
+</doc>

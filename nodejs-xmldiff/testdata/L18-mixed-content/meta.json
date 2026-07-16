@@ -1,0 +1,4 @@
+{
+  "name": "Mixed content text change",
+  "description": "Paragraph with nested em and surrounding text nodes. Text outside/inside inline changes; leaf dual logic only targets element-child-free nodes."
+}

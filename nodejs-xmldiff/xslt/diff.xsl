@@ -1,21 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Port of the original ID-based XML diffing algorithm (diff.xsl).
+  Port of the original ID-based XML diffing algorithm (diff.xsl), with extensions:
+    L06 – zero surviving children under a surviving parent
+    L09 – cross-parent moves (same @id, different parent @id)
+
   Input source document shape:
     <diffing>
       <old-version>...</old-version>
       <new-version>...</new-version>
     </diffing>
-  Output: merged new-version tree with @diffing markers and optional
-  dual changed nodes (@diffing-version old|new) for leaf text changes.
 -->
 <xsl:stylesheet version="3.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:local="urn:xmldiff:local"
                 exclude-result-prefixes="#all">
 
     <xsl:output method="xml" indent="yes"/>
 
-    <!-- identity for attributes in all modes -->
+    <!--
+      LCS-based moved ids computed in Node (moveDetect.js) and passed in.
+      Replaces the brittle preceding-sibling heuristic (false positives on L15).
+    -->
+    <xsl:param name="moved-ids" as="xs:string*" select="()"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+
+    <xsl:function name="local:is-moved-id" as="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xsl:param name="id" as="xs:string"/>
+        <xsl:sequence select="$id = $moved-ids"/>
+    </xsl:function>
+
+    <!-- Compare attributes except @id (and any diffing-* bookkeeping). -->
+    <xsl:function name="local:attrs-differ" as="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xsl:param name="a" as="element()"/>
+        <xsl:param name="b" as="element()"/>
+        <xsl:variable name="a-atts" select="$a/@*[local-name() != 'id' and not(starts-with(local-name(), 'diffing'))]"/>
+        <xsl:variable name="b-atts" select="$b/@*[local-name() != 'id' and not(starts-with(local-name(), 'diffing'))]"/>
+        <xsl:sequence select="
+            count($a-atts) != count($b-atts)
+            or exists(
+              for $att in $a-atts
+              return if ($b/@*[node-name(.) = node-name($att)] = string($att))
+                     then ()
+                     else true()
+            )
+            or exists(
+              for $att in $b-atts
+              return if ($a/@*[node-name(.) = node-name($att)])
+                     then ()
+                     else true()
+            )"/>
+    </xsl:function>
+
+    <!-- absent from a parent's child axis in the other version: deleted or moved away -->
+    <xsl:function name="local:is-absent" as="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xsl:param name="n" as="element()"/>
+        <xsl:sequence select="$n/@diffing = 'deleted' or $n/@diffing = 'moved'"/>
+    </xsl:function>
+
+    <xsl:function name="local:is-survivor" as="xs:boolean" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xsl:param name="n" as="element()"/>
+        <xsl:sequence select="$n/@diffing = 'changed' or $n/@diffing = 'unchanged'"/>
+    </xsl:function>
+
     <xsl:template match="@*" mode="#all">
         <xsl:copy/>
     </xsl:template>
@@ -27,14 +73,18 @@
                 <xsl:when test="ancestor::new-version">
                     <xsl:variable name="y-id" select="if (@id) then string(@id) else ''"/>
                     <xsl:if test="$y-id != ''">
+                        <xsl:variable name="old-match"
+                                      select="/descendant::old-version//*[@id = $y-id][1]"/>
                         <xsl:choose>
-                            <!-- id does not exist in old document → new -->
-                            <xsl:when test="not(/descendant::old-version//*[@id = $y-id])">
+                            <xsl:when test="empty($old-match)">
                                 <xsl:attribute name="diffing">new</xsl:attribute>
                             </xsl:when>
-                            <!-- text content changed → changed -->
+                            <xsl:when test="local:is-moved-id($y-id)">
+                                <xsl:attribute name="diffing">moved</xsl:attribute>
+                            </xsl:when>
                             <xsl:when test="normalize-space(string(.)) !=
-                                            normalize-space(string(/descendant::old-version//*[@id = $y-id][1]))">
+                                            normalize-space(string($old-match))
+                                            or local:attrs-differ(., $old-match)">
                                 <xsl:attribute name="diffing">changed</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
@@ -46,13 +96,18 @@
                 <xsl:otherwise>
                     <xsl:variable name="y-id" select="if (@id) then string(@id) else ''"/>
                     <xsl:if test="$y-id != ''">
+                        <xsl:variable name="new-match"
+                                      select="/descendant::new-version//*[@id = $y-id][1]"/>
                         <xsl:choose>
-                            <!-- id does not exist in new document → deleted -->
-                            <xsl:when test="not(/descendant::new-version//*[@id = $y-id])">
+                            <xsl:when test="empty($new-match)">
                                 <xsl:attribute name="diffing">deleted</xsl:attribute>
                             </xsl:when>
+                            <xsl:when test="local:is-moved-id($y-id)">
+                                <xsl:attribute name="diffing">moved</xsl:attribute>
+                            </xsl:when>
                             <xsl:when test="normalize-space(string(.)) !=
-                                            normalize-space(string(/descendant::new-version//*[@id = $y-id][1]))">
+                                            normalize-space(string($new-match))
+                                            or local:attrs-differ(., $new-match)">
                                 <xsl:attribute name="diffing">changed</xsl:attribute>
                             </xsl:when>
                             <xsl:otherwise>
@@ -66,28 +121,52 @@
         </xsl:copy>
     </xsl:template>
 
-    <!-- ========== STEP 2: merge deleted siblings into new version ========== -->
+    <!-- ========== STEP 2: merge ========== -->
+
+    <!-- Copy absent nodes (deleted / moved-away ghosts) into the merge. -->
+    <xsl:template name="emit-absent">
+        <xsl:param name="nodes" as="element()*"/>
+        <xsl:for-each select="$nodes">
+            <xsl:copy>
+                <xsl:copy-of select="@* except @diffing-version"/>
+                <xsl:if test="@diffing = 'moved'">
+                    <xsl:attribute name="diffing-version">old</xsl:attribute>
+                </xsl:if>
+                <xsl:copy-of select="node()"/>
+            </xsl:copy>
+        </xsl:for-each>
+    </xsl:template>
 
     <!--
-      Extension (L06): when a surviving parent has ZERO surviving children from old
-      (all old children deleted / replaced by brand-new nodes), the original
-      sibling-anchor rules never fire. Copy all deleted old children into the
-      parent before merging the new child axis.
+      L06: surviving parent with zero surviving children from old →
+      emit all absent old children, then merge new children.
     -->
     <xsl:template name="merge-copy-element">
         <xsl:variable name="y-id" select="if (@id) then string(@id) else ''"/>
         <xsl:variable name="old-elem" select="/descendant::old-version//*[@id = $y-id][1]"/>
         <xsl:variable name="surviving-old-children"
-                      select="$old-elem/*[@diffing = 'changed' or @diffing = 'unchanged']"/>
-        <xsl:variable name="deleted-old-children"
-                      select="$old-elem/*[@diffing = 'deleted']"/>
+                      select="$old-elem/*[local:is-survivor(.)]"/>
+        <xsl:variable name="absent-old-children"
+                      select="$old-elem/*[local:is-absent(.)]"/>
         <xsl:copy>
             <xsl:apply-templates select="@*" mode="merge"/>
+            <!-- live moved node at its new parent -->
+            <xsl:if test="@diffing = 'moved' and not(@diffing-version)">
+                <xsl:attribute name="diffing-version">new</xsl:attribute>
+            </xsl:if>
             <xsl:choose>
+                <!--
+                  L06: no surviving children from old under this parent.
+                  Note: an "unchanged" node can still have changed descendants
+                  (cross-parent moves preserve concatenated text on ancestors),
+                  so we always recurse; we do not copy-of and skip children.
+                -->
                 <xsl:when test="exists($old-elem)
-                                and exists($deleted-old-children)
+                                and exists($absent-old-children)
                                 and empty($surviving-old-children)">
-                    <xsl:copy-of select="$deleted-old-children"/>
+                    <xsl:call-template name="emit-absent">
+                        <xsl:with-param name="nodes" select="$absent-old-children"/>
+                    </xsl:call-template>
                     <xsl:apply-templates select="node()" mode="merge"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -101,26 +180,41 @@
         <xsl:variable name="y-id" select="if (@id) then string(@id) else ''"/>
         <xsl:variable name="old-elem" select="/descendant::old-version//*[@id = $y-id][1]"/>
         <xsl:choose>
-            <!-- Only merge around surviving elements that are not under unchanged/new ancestors -->
+            <!--
+              Moved nodes at their NEW location must not use old-location sibling
+              anchors (those belong to the old parent).
+            -->
+            <xsl:when test="$y-id != '' and @diffing = 'moved'">
+                <xsl:call-template name="merge-copy-element"/>
+            </xsl:when>
+
+            <!--
+              Original ancestor::unchanged guard removed: parent string-equality can
+              stay "unchanged" across cross-parent moves (L09), which incorrectly
+              disabled sibling-anchor insertion for all descendants.
+              Still skip nodes under a NEW ancestor (deletes never belong there).
+            -->
             <xsl:when test="$y-id != ''
                             and exists($old-elem)
-                            and not(ancestor::*[@diffing = 'unchanged'] or ancestor::*[@diffing = 'new'])">
-                <xsl:choose>
-                    <!-- preceding deleted siblings in old → copy them before current -->
-                    <xsl:when test="$old-elem/preceding-sibling::*[1][@diffing = 'deleted']">
-                        <xsl:copy-of select="$old-elem/preceding-sibling::*[@diffing = 'deleted']
-                                              [following-sibling::*[not(@diffing = 'deleted')][1][@id = $y-id]]"/>
-                        <xsl:call-template name="merge-copy-element"/>
-                    </xsl:when>
-                    <!-- only deleted (or nothing surviving) after this element in old → copy trailing deletes -->
-                    <xsl:when test="count($old-elem/following-sibling::*[@diffing = 'changed' or @diffing = 'unchanged']) = 0">
-                        <xsl:call-template name="merge-copy-element"/>
-                        <xsl:copy-of select="$old-elem/following-sibling::*"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:call-template name="merge-copy-element"/>
-                    </xsl:otherwise>
-                </xsl:choose>
+                            and not(ancestor::*[@diffing = 'new'])">
+                <!--
+                  Preceding and trailing absents are NOT mutually exclusive
+                  (L10: survivor can have moved nodes on both sides).
+                -->
+                <xsl:if test="$old-elem/preceding-sibling::*[1][local:is-absent(.)]">
+                    <xsl:call-template name="emit-absent">
+                        <xsl:with-param name="nodes"
+                            select="$old-elem/preceding-sibling::*[local:is-absent(.)]
+                                      [following-sibling::*[not(local:is-absent(.))][1][@id = $y-id]]"/>
+                    </xsl:call-template>
+                </xsl:if>
+                <xsl:call-template name="merge-copy-element"/>
+                <xsl:if test="empty($old-elem/following-sibling::*[local:is-survivor(.)])">
+                    <xsl:call-template name="emit-absent">
+                        <xsl:with-param name="nodes"
+                            select="$old-elem/following-sibling::*[local:is-absent(.)]"/>
+                    </xsl:call-template>
+                </xsl:if>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy>
@@ -130,27 +224,43 @@
         </xsl:choose>
     </xsl:template>
 
-    <!-- ========== STEP 3: expose old/new text for changed leaves ========== -->
+    <!-- ========== STEP 3: expose old/new text (and attrs) for changed nodes ========== -->
     <xsl:template match="node()" mode="textdiff">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()" mode="textdiff"/>
         </xsl:copy>
     </xsl:template>
 
-    <!-- PCDATA-only changed elements (no element children): emit old then new -->
+    <!-- deep copy old subtree as a version=old snapshot (strip analyze markers) -->
+    <xsl:template match="*" mode="snapshot-old">
+        <xsl:copy>
+            <xsl:copy-of select="@*[local-name() != 'diffing' and local-name() != 'diffing-version']"/>
+            <xsl:if test="not(ancestor::*)">
+                <!-- root of snapshot: mark for roundtrip -->
+            </xsl:if>
+            <xsl:apply-templates select="node()" mode="snapshot-old"/>
+        </xsl:copy>
+    </xsl:template>
+    <xsl:template match="text()|comment()|processing-instruction()" mode="snapshot-old">
+        <xsl:copy/>
+    </xsl:template>
+
+    <!-- PCDATA leaf changed: dual nodes with correct per-version attributes -->
     <xsl:template match="*[@diffing = 'changed']
                           [not(child::*)]
                           [not(ancestor::*[@diffing = 'new'])]
                           [not(ancestor::*[@diffing = 'deleted'])]
-                          [not(ancestor::*[@diffing = 'unchanged'])]"
-                  mode="textdiff">
+                          [not(ancestor::*[@diffing = 'moved'][@diffing-version = 'old'])]"
+                  mode="textdiff"
+                  priority="5">
         <xsl:variable name="y-id" select="string(@id)"/>
-        <xsl:variable name="old-text"
-                      select="string($analyzed-root/descendant::old-version//*[@id = $y-id][1])"/>
+        <xsl:variable name="old-elem"
+                      select="$analyzed-root/descendant::old-version//*[@id = $y-id][1]"/>
         <xsl:copy>
-            <xsl:apply-templates select="@*" mode="textdiff"/>
+            <xsl:copy-of select="$old-elem/@*[local-name() != 'diffing']"/>
+            <xsl:attribute name="diffing">changed</xsl:attribute>
             <xsl:attribute name="diffing-version">old</xsl:attribute>
-            <xsl:value-of select="$old-text"/>
+            <xsl:value-of select="string($old-elem)"/>
         </xsl:copy>
         <xsl:copy>
             <xsl:apply-templates select="@*" mode="textdiff"/>
@@ -159,21 +269,90 @@
         </xsl:copy>
     </xsl:template>
 
-    <!-- stash analyzed tree for textdiff lookups -->
+    <!--
+      L18/L19/L20: dual-snapshot a changed element when untracked content is involved:
+        - mixed content text nodes (no @id), or
+        - anonymous element children in NEW or OLD (L20: anonymous delete).
+      Falling back to a full element snapshot is the escape hatch when the
+      ID algorithm cannot name the node.
+    -->
+    <xsl:template match="*[@diffing = 'changed']
+                          [child::*]
+                          [not(ancestor::*[@diffing = 'new'])]
+                          [not(ancestor::*[@diffing = 'deleted'])]
+                          [not(ancestor::*[@diffing = 'moved'][@diffing-version = 'old'])]"
+                  mode="textdiff"
+                  priority="6">
+        <xsl:variable name="y-id" select="string(@id)"/>
+        <xsl:variable name="old-elem"
+                      select="$analyzed-root/descendant::old-version//*[@id = $y-id][1]"/>
+        <xsl:choose>
+            <xsl:when test="text()[normalize-space()]
+                            or *[not(@id)]
+                            or exists($old-elem/*[not(@id)])">
+                <xsl:for-each select="$old-elem">
+                    <xsl:copy>
+                        <xsl:copy-of select="@*[local-name() != 'diffing']"/>
+                        <xsl:attribute name="diffing">changed</xsl:attribute>
+                        <xsl:attribute name="diffing-version">old</xsl:attribute>
+                        <xsl:apply-templates select="node()" mode="snapshot-old"/>
+                    </xsl:copy>
+                </xsl:for-each>
+                <xsl:copy>
+                    <xsl:apply-templates select="@*" mode="textdiff"/>
+                    <xsl:attribute name="diffing-version">new</xsl:attribute>
+                    <xsl:apply-templates select="node()" mode="textdiff"/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:next-match/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!--
+      L17: non-leaf changed node with attribute differences (no mixed text) —
+      embed old attributes in a marker element for roundtrip.
+    -->
+    <xsl:template match="*[@diffing = 'changed'][child::*]
+                          [not(text()[normalize-space()])]
+                          [not(ancestor::*[@diffing = 'new'])]
+                          [not(ancestor::*[@diffing = 'deleted'])]"
+                  mode="textdiff"
+                  priority="4">
+        <xsl:variable name="y-id" select="string(@id)"/>
+        <xsl:variable name="old-elem"
+                      select="$analyzed-root/descendant::old-version//*[@id = $y-id][1]"/>
+        <xsl:copy>
+            <xsl:apply-templates select="@*" mode="textdiff"/>
+            <xsl:if test="exists($old-elem) and local:attrs-differ(., $old-elem)">
+                <_diff_old_attrs>
+                    <xsl:copy-of select="$old-elem/@*[local-name() != 'id' and local-name() != 'diffing']"/>
+                </_diff_old_attrs>
+            </xsl:if>
+            <xsl:apply-templates select="node()" mode="textdiff"/>
+        </xsl:copy>
+    </xsl:template>
+
     <xsl:variable name="analyzed-root" as="document-node()">
         <xsl:document>
             <xsl:apply-templates select="/" mode="analyze"/>
         </xsl:document>
     </xsl:variable>
 
-    <!-- ========== entry ========== -->
     <xsl:template match="/">
         <xsl:variable name="merged" as="document-node()">
             <xsl:document>
                 <xsl:apply-templates select="$analyzed-root" mode="merge"/>
             </xsl:document>
         </xsl:variable>
-        <xsl:apply-templates select="$merged/diffing/new-version/node()" mode="textdiff"/>
+        <!--
+          Wrapper allows dual top-level snapshots (L19) without producing
+          multi-root XML that Saxon cannot re-parse.
+        -->
+        <merge-result>
+            <xsl:apply-templates select="$merged/diffing/new-version/node()" mode="textdiff"/>
+        </merge-result>
     </xsl:template>
 
 </xsl:stylesheet>

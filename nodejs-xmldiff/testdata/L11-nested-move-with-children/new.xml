@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <section id="s1">
+    <p id="p3">After block</p>
+  </section>
+  <section id="s2">
+    <p id="p4">Other section</p>
+    <block id="b1">
+      <p id="p1">Inside block</p>
+      <p id="p2">Also inside</p>
+    </block>
+  </section>
+</doc>

@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<doc diffing="changed" id="d1">
-   <section diffing="changed" id="s1">
-      <p diffing="new" id="p3">Brand new child</p>
-      <quote diffing="new" id="q1">Replacement content</quote>
-   </section>
-</doc>
+<merge-result>
+   <doc diffing="changed" id="d1">
+      <section diffing="changed" id="s1">
+         <p diffing="deleted" id="p1">Old child one</p>
+         <p diffing="deleted" id="p2">Old child two</p>
+         <list diffing="deleted" id="l1">
+            <item diffing="deleted" id="i1">old item</item>
+         </list>
+         <p diffing="new" id="p3">Brand new child</p>
+         <quote diffing="new" id="q1">Replacement content</quote>
+      </section>
+   </doc>
+</merge-result>

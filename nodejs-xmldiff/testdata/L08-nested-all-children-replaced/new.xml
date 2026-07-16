@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc id="d1">
+  <chapter id="c1">
+    <section id="s1">
+      <block id="b1">
+        <quote id="q1">Fully replaced inner</quote>
+        <list id="l1">
+          <item id="i1">new nested</item>
+        </list>
+      </block>
+      <block id="b2">
+        <p id="p3">Other keep</p>
+      </block>
+    </section>
+  </chapter>
+</doc>

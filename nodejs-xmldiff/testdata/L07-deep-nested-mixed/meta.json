@@ -1,0 +1,4 @@
+{
+  "name": "Deep nested mixed edits",
+  "description": "4-level tree: text change, sibling delete/insert, deep item delete, nested insert under surviving item."
+}

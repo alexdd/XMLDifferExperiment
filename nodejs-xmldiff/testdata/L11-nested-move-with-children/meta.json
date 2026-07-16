@@ -1,0 +1,4 @@
+{
+  "name": "Move nested subtree across parents",
+  "description": "Block b1 (with two children) moves from s1 to s2; children keep same parent b1."
+}

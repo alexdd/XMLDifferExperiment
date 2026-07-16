@@ -1,0 +1,4 @@
+{
+  "name": "Elements without @id",
+  "description": "Middle paragraph has no id in either version but text changes. ID-based algorithm cannot correlate anonymous nodes."
+}

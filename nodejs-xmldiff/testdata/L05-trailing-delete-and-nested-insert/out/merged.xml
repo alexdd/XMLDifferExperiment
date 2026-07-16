@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<doc diffing="changed" id="d1">
-   <section diffing="changed" id="s1">
-      <p diffing="unchanged" id="p1">Lead</p>
-      <p diffing="unchanged" id="p2">Middle</p>
-      <p diffing="deleted" id="p3">Tail-delete</p>
-      <note diffing="deleted" id="n1">Footnote-delete</note>
-      <aside diffing="new" id="a1">
-         <p diffing="new" id="p4">Inserted nested aside</p>
-      </aside>
-   </section>
-</doc>
+<merge-result>
+   <doc diffing="changed" id="d1">
+      <section diffing="changed" id="s1">
+         <p diffing="unchanged" id="p1">Lead</p>
+         <p diffing="unchanged" id="p2">Middle</p>
+         <p diffing="deleted" id="p3">Tail-delete</p>
+         <note diffing="deleted" id="n1">Footnote-delete</note>
+         <aside diffing="new" id="a1">
+            <p diffing="new" id="p4">Inserted nested aside</p>
+         </aside>
+      </section>
+   </doc>
+</merge-result>
