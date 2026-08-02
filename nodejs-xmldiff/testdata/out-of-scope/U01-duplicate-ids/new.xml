@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book id="b1">
+  <chapter id="shared">
+    <title id="shared">Chapter One</title>
+    <p id="p1">Hello universe</p>
+  </chapter>
+  <chapter id="c2">
+    <title id="t2">Other</title>
+    <p id="p2">Alpha</p>
+  </chapter>
+</book>

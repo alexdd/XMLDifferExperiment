@@ -29,8 +29,16 @@
                 <xsl:when test="ancestor::new-version">
                     <xsl:variable name="y-id" select="if (@id) then string(@id) else ''"/>
                     <xsl:if test="$y-id != ''">
+                        <!--
+                          Prefer id+name (UWE reuses @id on chapter/title).
+                          Parentheses required: //*[@id=x][1] can return many nodes.
+                        -->
+                        <xsl:variable name="old-by-name"
+                                      select="(/descendant::old-version//*[@id = $y-id and local-name() = local-name(current())])[1]"/>
                         <xsl:variable name="old-match"
-                                      select="/descendant::old-version//*[@id = $y-id][1]"/>
+                                      select="if (exists($old-by-name))
+                                              then $old-by-name
+                                              else (/descendant::old-version//*[@id = $y-id])[1]"/>
                         <xsl:choose>
                             <xsl:when test="empty($old-match)">
                                 <xsl:attribute name="diffing">new</xsl:attribute>
@@ -52,8 +60,12 @@
                 <xsl:otherwise>
                     <xsl:variable name="y-id" select="if (@id) then string(@id) else ''"/>
                     <xsl:if test="$y-id != ''">
+                        <xsl:variable name="new-by-name"
+                                      select="(/descendant::new-version//*[@id = $y-id and local-name() = local-name(current())])[1]"/>
                         <xsl:variable name="new-match"
-                                      select="/descendant::new-version//*[@id = $y-id][1]"/>
+                                      select="if (exists($new-by-name))
+                                              then $new-by-name
+                                              else (/descendant::new-version//*[@id = $y-id])[1]"/>
                         <xsl:choose>
                             <xsl:when test="empty($new-match)">
                                 <xsl:attribute name="diffing">deleted</xsl:attribute>
@@ -99,7 +111,12 @@
     -->
     <xsl:template name="merge-copy-element">
         <xsl:variable name="y-id" select="if (@id) then string(@id) else ''"/>
-        <xsl:variable name="old-elem" select="/descendant::old-version//*[@id = $y-id][1]"/>
+        <xsl:variable name="old-by-name"
+                      select="(/descendant::old-version//*[@id = $y-id and local-name() = local-name(current())])[1]"/>
+        <xsl:variable name="old-elem"
+                      select="if (exists($old-by-name))
+                              then $old-by-name
+                              else (/descendant::old-version//*[@id = $y-id])[1]"/>
         <xsl:variable name="surviving-old-children"
                       select="$old-elem/*[local:is-survivor(.)]"/>
         <xsl:variable name="absent-old-children"
@@ -134,7 +151,12 @@
 
     <xsl:template match="node()" mode="merge">
         <xsl:variable name="y-id" select="if (@id) then string(@id) else ''"/>
-        <xsl:variable name="old-elem" select="/descendant::old-version//*[@id = $y-id][1]"/>
+        <xsl:variable name="old-by-name"
+                      select="(/descendant::old-version//*[@id = $y-id and local-name() = local-name(current())])[1]"/>
+        <xsl:variable name="old-elem"
+                      select="if (exists($old-by-name))
+                              then $old-by-name
+                              else (/descendant::old-version//*[@id = $y-id])[1]"/>
         <xsl:choose>
             <!--
               Moved nodes at their NEW location must not use old-location sibling
@@ -210,8 +232,12 @@
                   mode="textdiff"
                   priority="5">
         <xsl:variable name="y-id" select="string(@id)"/>
+        <xsl:variable name="old-by-name"
+                      select="($analyzed-root/descendant::old-version//*[@id = $y-id and local-name() = local-name(current())])[1]"/>
         <xsl:variable name="old-elem"
-                      select="$analyzed-root/descendant::old-version//*[@id = $y-id][1]"/>
+                      select="if (exists($old-by-name))
+                              then $old-by-name
+                              else ($analyzed-root/descendant::old-version//*[@id = $y-id])[1]"/>
         <xsl:copy>
             <xsl:copy-of select="$old-elem/@*[local-name() != 'diffing']"/>
             <xsl:attribute name="diffing">changed</xsl:attribute>
@@ -238,8 +264,12 @@
                   mode="textdiff"
                   priority="6">
         <xsl:variable name="y-id" select="string(@id)"/>
+        <xsl:variable name="old-by-name"
+                      select="($analyzed-root/descendant::old-version//*[@id = $y-id and local-name() = local-name(current())])[1]"/>
         <xsl:variable name="old-elem"
-                      select="$analyzed-root/descendant::old-version//*[@id = $y-id][1]"/>
+                      select="if (exists($old-by-name))
+                              then $old-by-name
+                              else ($analyzed-root/descendant::old-version//*[@id = $y-id])[1]"/>
         <xsl:choose>
             <xsl:when test="*[not(@id)] or exists($old-elem/*[not(@id)])">
                 <xsl:for-each select="$old-elem">
@@ -274,8 +304,12 @@
                   mode="textdiff"
                   priority="4">
         <xsl:variable name="y-id" select="string(@id)"/>
+        <xsl:variable name="old-by-name"
+                      select="($analyzed-root/descendant::old-version//*[@id = $y-id and local-name() = local-name(current())])[1]"/>
         <xsl:variable name="old-elem"
-                      select="$analyzed-root/descendant::old-version//*[@id = $y-id][1]"/>
+                      select="if (exists($old-by-name))
+                              then $old-by-name
+                              else ($analyzed-root/descendant::old-version//*[@id = $y-id])[1]"/>
         <xsl:copy>
             <xsl:apply-templates select="@*" mode="textdiff"/>
             <xsl:if test="exists($old-elem) and local:attrs-differ(., $old-elem)">

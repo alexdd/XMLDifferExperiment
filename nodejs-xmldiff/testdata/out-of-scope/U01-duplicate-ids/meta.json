@@ -1,0 +1,4 @@
+{
+  "name": "Duplicate @id across chapter and title (UWE)",
+  "description": "Out of product invariant, but HTML5 UWE emits duplicate ids. Diff must not throw XPTY0004 on string()."
+}
